@@ -44,11 +44,11 @@ Cheese is licensed under the [AGPL-3.0 license](LICENSE).
 
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for details.
+See [CONTRIBUTING.md](.github/CONTRIBUTING.md) for details.
 
 ## Code of Conduct
 
-See [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) for details.
+See [CODE_OF_CONDUCT.md](.github/CODE_OF_CONDUCT.md) for details.
 
 ## Contributors
 
