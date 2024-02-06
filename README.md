@@ -1,54 +1,55 @@
-# Cheese
+﻿# Cheese
 
-A util of Crequency that helps to manage repository, fetch codes and develop plugins.
+A util of `KitX Project` that helps to manage repository, fetch codes and develop plugins.
 
 ## Installation
 
 Install Cheese by dotnet tool:
 
-```bash
+```shell
 dotnet tool install --global Crequency.Cheese
 ```
 
 ## Usage
 
-Cheese support develop Crequency software and KitX plugins. Cheese will detect package type automatically. When you develop a Crequency software, `Repository management` commands will be available. When you develop a KitX plugin, `Plugin management` commands will be available.
+`Cheese` support develop KitX Project Components and KitX plugins.
 
-### Repository management
+Cheese will detect plugin project type automatically.
 
+- When you develop a KitX Project Components, `KitX Project` commands will be available.
+- When you develop a KitX Plugin, `Plugins Development` commands will be available.
+
+### KitX Project
+
+- `init` - Init `KitX Project` repo with submodules from [GitHub](https://github.com/Crequency/KitX) or other sources.
+    - After repo cloned, Cheese will requires you to select which fields you want to develop with.
 - `build` - Build the repository.
-- `ci` - For CI/CD workflow.
 - `clean` - Clean the repository.
 - `commit` - Commit the changes to the current Git repository. This command will use Crequency commit message format.
 - `fetch` - Fetch the subpackages required by the repository recursively.
 - `publish` - Publish the repository to the specified directory. This command will run `fetch` and `build` before publishing. Then run publish scripts if exists.
 - `test` - Run tests for the repository.
+- `doctor` - Check and try to fix your development environment.
 
-### Plugin management
+For `build`, `clean`, `commit`, `fetch`, `publish`, `test`, `doctor` commands you can append field name like: [dashboard, mobile, installer, website, ...]
 
-- `build`, `ci`, `test` - Same as `Repository management`.
+### Plugins Development
+
 - `create` - Create a new plugin.
 - `init` - Initialize the plugin by template.
 - `pack` - Pack the plugin to a KXP file.
 
+### Tool Commands
+
+- `unpack` - Unpack [`.kxp`, `.kxps`, `.kxpc`, `.kxpcs`] file to plugin files or plugins files.
+
 ## Profile
 
-Cheese will use the profile file to manage the repository or plugin. The profile file is a JSON file in the root directory of the repository. The Crequency software profile file is named `cheese-repo.json`, and the KitX plugin profile file is named `plugin.json`.
+Cheese will use the profile file to manage the plugin.
 
-- About Crequency software profile, see [docs/cheese-repo.md](docs/cheese-repo.md).
-- About KitX plugin profile, see [docs/plugin.md](docs/plugin.md).
+The profile file is a JSON file in the root directory of the plugin repo.
 
-## License
-
-Cheese is licensed under the [AGPL-3.0 license](LICENSE).
-
-## Contributing
-
-See [CONTRIBUTING.md](.github/CONTRIBUTING.md) for details.
-
-## Code of Conduct
-
-See [CODE_OF_CONDUCT.md](.github/CODE_OF_CONDUCT.md) for details.
+The KitX plugin profile file is named `plugin.json`.
 
 ## Contributors
 
