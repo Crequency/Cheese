@@ -1,4 +1,5 @@
-﻿using Cheese.Options;
+﻿using Cheese;
+using Cheese.Options;
 using CommandLine;
 
 Console.WriteLine(
@@ -7,8 +8,10 @@ Console.WriteLine(
     """
 );
 
-Parser.Default.ParseArguments<PublishOptions, object>(args)
-    .WithParsed<PublishOptions>(options =>
+Instances.Init();
+
+Parser.Default.ParseArguments<Options, PublishOptions, I18nOptions, object>(args)
+    .WithParsed<Options>(options =>
     {
         if (options.Verbose)
             Console.WriteLine(
@@ -19,6 +22,7 @@ Parser.Default.ParseArguments<PublishOptions, object>(args)
                 # dir:  {Environment.CurrentDirectory}
                 """
             );
-
-        new Publisher().Execute(options);
-    });
+    })
+    .WithParsed<PublishOptions>(options => new Publisher().Execute(options))
+    .WithParsed<I18nOptions>(options => Instances.I18nManager?.Execute(options))
+    ;

@@ -1,4 +1,5 @@
-﻿using Cheese.Options;
+﻿using Cheese;
+using Cheese.Options;
 using Cheese.Utils.Publisher;
 using Common.BasicHelper.Utils.Extensions;
 using System.Diagnostics;
@@ -6,30 +7,6 @@ using System.IO.Compression;
 
 internal class Publisher
 {
-    private string? BaseSlnDir { get; set; }
-
-    private bool FindSolutionUpward(string startLocation, string solutionFileName)
-    {
-        var currentDirInfo = new DirectoryInfo(startLocation);
-
-        if (!currentDirInfo.Exists || currentDirInfo.Parent is null || CheckForFile(currentDirInfo, solutionFileName))
-        {
-            var path = Path.Combine(currentDirInfo.FullName, solutionFileName);
-            if (File.Exists(path))
-            {
-                BaseSlnDir = currentDirInfo.FullName;
-                return true;
-            }
-            else return false;
-        }
-
-        return FindSolutionUpward(currentDirInfo.Parent.FullName, solutionFileName);
-    }
-
-    private static bool CheckForFile(DirectoryInfo directory, string fileNameIgnoreCase) => directory.GetFiles().Any(
-        x => x.Name.Equals(fileNameIgnoreCase, StringComparison.OrdinalIgnoreCase)
-    );
-
     internal void Execute(PublishOptions options)
     {
         Console.WriteLine(
@@ -38,21 +15,21 @@ internal class Publisher
             """
         );
 
-        var location = Environment.CurrentDirectory.GetFullPath();
-
-        if (!FindSolutionUpward(location, "KitX.sln"))
+        if (Instances.PathHelper!.BaseSlnDir is null)
         {
-            Console.WriteLine("! You're not in a KitX repo.");
+            Console.WriteLine("! You're not in KitX repo.");
             return;
         }
 
-        var publishDir = $"{BaseSlnDir}/KitX Publish".GetFullPath();
+        var baseDir = Instances.PathHelper!.BaseSlnDir;
+
+        var publishDir = $"{baseDir}/KitX Publish".GetFullPath();
 
         if (publishDir is not null && Directory.Exists(publishDir) && !options.SkipGenerating)
             foreach (var dir in new DirectoryInfo(publishDir).GetDirectories())
                 Directory.Delete(dir.FullName, true);
 
-        var path = Path.GetFullPath("../../KitX Clients/KitX Dashboard/KitX Dashboard/");
+        var path = $"{baseDir}/KitX Clients/KitX Dashboard/KitX Dashboard/".GetFullPath();
         var pro = "Properties/";
         var pub = "PublishProfiles/";
         var ab_pub_path = Path.GetFullPath($"{path}{pro}{pub}");
@@ -112,12 +89,12 @@ internal class Publisher
                 {
                     print(
                         $"""
-                >>> On task_{index}:
-                    Task file: {filename}
-                    Executing: {cmd} {arg}
-                    Output:
+                        >>> On task_{index}:
+                            Task file: {filename}
+                            Executing: {cmd} {arg}
+                            Output:
 
-                """
+                        """
                     );
                 }
                 var process = new Process();

@@ -30,8 +30,9 @@ Cheese will detect plugin project type automatically.
 - `publish` - Publish the repository to the specified directory. This command will run `fetch` and `build` before publishing. Then run publish scripts if exists.
 - `test` - Run tests for the repository.
 - `doctor` - Check and try to fix your development environment.
+- `i18n` - i18n related command.
 
-For `build`, `clean`, `commit`, `fetch`, `publish`, `test`, `doctor` commands you can append field name like: [dashboard, mobile, installer, website, ...]
+For `build`, `clean`, `commit`, `fetch`, `publish`, `test`, `doctor`, `i18n` commands you can append field name like: [dashboard, mobile, installer, website, ...]
 
 ### Plugins Development
 
