@@ -5,7 +5,37 @@
         <TargetFramework>net8.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     </PropertyGroup>
+
+    <PropertyGroup>
+        <AssemblyVersion>$(Version)</AssemblyVersion>
+        <FileVersion>$(Version)</FileVersion>
+        <Version>24.10.$([System.DateTime]::UtcNow.Date.Subtract($([System.DateTime]::Parse("2024-02-07"))).TotalDays).$([System.Math]::Floor($([System.DateTime]::UtcNow.TimeOfDay.TotalMinutes)))</Version>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <Title>Cheese</Title>
+        <Authors>Dynesshely</Authors>
+        <Company>Crequency</Company>
+        <Description>KitX Project development auxiliary toolchain.</Description>
+        <PackageLicenseExpression>AGPL-3.0-only</PackageLicenseExpression>
+        <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+        <!--<PackageIcon>KitX-Background-ani.png</PackageIcon>-->
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageTags>kitx;kitx-sdk;cheese;toolchain</PackageTags>
+        <PackageProjectUrl>https://github.com/Crequency/KitX/</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/Crequency/Cheese/</RepositoryUrl>
+        <PackAsTool>True</PackAsTool>
+        <ToolCommandName>cheese</ToolCommandName>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <None Update="README.md">
+            <PackagePath>\</PackagePath>
+            <Pack>True</Pack>
+        </None>
+    </ItemGroup>
 
     <ItemGroup>
         <PackageReference Include="CommandLineParser" Version="2.9.1" />
