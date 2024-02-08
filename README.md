@@ -36,7 +36,7 @@ For `build`, `clean`, `commit`, `fetch`, `publish`, `test`, `doctor` commands yo
 ### Plugins Development
 
 - `create` - Create a new plugin.
-- `init` - Initialize the plugin by template.
+- `attach` - Attach to a project file and enter development mode.
 - `pack` - Pack the plugin to a KXP file.
 
 ### Tool Commands
