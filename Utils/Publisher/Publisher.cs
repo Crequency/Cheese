@@ -1,9 +1,9 @@
-﻿using Cheese;
+﻿using System.Diagnostics;
+using System.IO.Compression;
+using Cheese;
 using Cheese.Options;
 using Cheese.Utils.Publisher;
 using Common.BasicHelper.Utils.Extensions;
-using System.Diagnostics;
-using System.IO.Compression;
 
 internal class Publisher
 {
