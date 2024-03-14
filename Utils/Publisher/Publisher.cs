@@ -1,13 +1,17 @@
 ﻿using System.Diagnostics;
 using System.IO.Compression;
-using Cheese;
 using Cheese.Options;
+using Cheese.Utils.Cheese;
 using Cheese.Utils.Publisher;
 using Common.BasicHelper.Utils.Extensions;
 
-internal class Publisher
+public class Publisher
 {
-    internal void Execute(PublishOptions options)
+    private static Publisher? _instance;
+
+    public static Publisher Instance => _instance ??= new();
+
+    public void Execute(PublishOptions options)
     {
         Console.WriteLine(
             """
@@ -15,13 +19,13 @@ internal class Publisher
             """
         );
 
-        if (Instances.PathHelper!.BaseSlnDir is null)
+        if (PathHelper.Instance.BaseSlnDir is null)
         {
             Console.WriteLine("! You're not in KitX repo.");
             return;
         }
 
-        var baseDir = Instances.PathHelper!.BaseSlnDir;
+        var baseDir = PathHelper.Instance.BaseSlnDir;
 
         var publishDir = $"{baseDir}/KitX Publish".GetFullPath();
 

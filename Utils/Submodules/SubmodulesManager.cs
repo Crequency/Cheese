@@ -1,7 +1,11 @@
 ﻿namespace Cheese.Utils.Submodules;
 
-internal class SubmodulesManager
+public class SubmodulesManager
 {
+    private static SubmodulesManager? _instance;
+
+    public static SubmodulesManager Instance => _instance ??= new();
+
     public SubmodulesManager()
     {
 

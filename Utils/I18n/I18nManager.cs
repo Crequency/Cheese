@@ -1,13 +1,19 @@
 ﻿using System.Text;
 using Cheese.Options;
+using Cheese.Utils.Cheese;
+using Cheese.Utils.Submodules;
 using Common.BasicHelper.Core.Shell;
 using Common.BasicHelper.Utils.Extensions;
 
 namespace Cheese.Utils.I18n;
 
-internal class I18nManager
+public class I18nManager
 {
-    internal I18nManager Execute(I18nOptions options)
+    private static I18nManager? _instance;
+
+    public static I18nManager Instance => _instance ??= new();
+
+    public I18nManager Execute(I18nOptions options)
     {
         if (options.Verbose)
             Console.WriteLine(
@@ -17,7 +23,7 @@ internal class I18nManager
                 """
             );
 
-        var location = Instances.PathHelper!.BaseSlnDir;
+        var location = PathHelper.Instance.BaseSlnDir;
 
         if (location is null)
         {
@@ -30,7 +36,7 @@ internal class I18nManager
             case "dashboard":
                 var relativePath = "%/KitX SDK/Reference/XamlMultiLanguageEditor";
 
-                Instances.SubmodulesManager?.Update(relativePath);
+                SubmodulesManager.Instance.Update(relativePath);
 
                 var exePath = relativePath.Replace("%", location).GetFullPath();
                 var scriptPath = $"{exePath}/run.ps1".GetFullPath();
