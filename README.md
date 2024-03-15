@@ -1,10 +1,10 @@
 ﻿# Cheese
 
-A util of `KitX Project` that helps to manage repository, fetch codes and develop plugins.
+A new generation of project scaffolding tools to make your development process more effective with half the effort.
 
 ## Installation
 
-Install Cheese by dotnet tool:
+Install `Cheese` by dotnet tool:
 
 ```shell
 dotnet tool install --global Crequency.Cheese
@@ -12,45 +12,34 @@ dotnet tool install --global Crequency.Cheese
 
 ## Usage
 
-`Cheese` support develop KitX Project Components and KitX plugins.
+You can use `setup` command from `Cheese` to clone a repo and setup it.
 
-Cheese will detect plugin project type automatically.
+For example:
 
-- When you develop a KitX Project Components, `KitX Project` commands will be available.
-- When you develop a KitX Plugin, `Plugins Development` commands will be available.
+```shell
+cheese setup Crequency/KitX.github
+# We use protocol suffix including "github", "gitlab", "gitee"
+# The default protocol is github, so you can execute: `cheese setup Crequency/KitX`
+```
 
-### KitX Project
+This command will clone `Crequency/KitX` repo from github, and check if there is `.cheese` folder.
 
-- `init` - Init `KitX Project` repo with submodules from [GitHub](https://github.com/Crequency/KitX) or other sources.
-    - After repo cloned, Cheese will requires you to select which fields you want to develop with.
-- `build` - Build the repository.
-- `clean` - Clean the repository.
-- `commit` - Commit the changes to the current Git repository. This command will use Crequency commit message format.
-- `fetch` - Fetch the subpackages required by the repository recursively.
-- `publish` - Publish the repository to the specified directory. This command will run `fetch` and `build` before publishing. Then run publish scripts if exists.
-- `test` - Run tests for the repository.
-- `doctor` - Check and try to fix your development environment.
-- `i18n` - i18n related command.
+With `.cheese` folder exists, the setup action will be execute automatically.
 
-For `build`, `clean`, `commit`, `fetch`, `publish`, `test`, `doctor`, `i18n` commands you can append field name like: [dashboard, mobile, installer, website, ...]
+### Update your project
 
-### Plugins Development
+Your repo should have a `.cheese` folder in the root directory like:
 
-- `create` - Create a new plugin.
-- `attach` - Attach to a project file and enter development mode.
-- `pack` - Pack the plugin to a KXP file.
+```text
++ project
+  + .cheese
+  + src
+  + docs
+    README.md
+    LICENSE
+```
 
-### Tool Commands
-
-- `unpack` - Unpack [`.kxp`, `.kxps`, `.kxpc`, `.kxpcs`] file to plugin files or plugins files.
-
-## Profile
-
-Cheese will use the profile file to manage the plugin.
-
-The profile file is a JSON file in the root directory of the plugin repo.
-
-The KitX plugin profile file is named `plugin.json`.
+You can create this folder by `cheese init` command.
 
 ## Contributors
 
