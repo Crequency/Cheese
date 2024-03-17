@@ -1,4 +1,4 @@
-﻿namespace Cheese.Utils.References;
+﻿namespace Cheese.Shared.References;
 
 public class ReferenceItem
 {

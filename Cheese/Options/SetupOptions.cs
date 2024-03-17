@@ -8,6 +8,9 @@ public class SetupOptions : Options
     [Option("reference", Default = false, HelpText = "Setup reference projects.")]
     public bool SetupReference { get; set; }
 
-    [Option("generate-default-references", Default = false, HelpText = "Generate default references.")]
+    [Option('f', "flavor", Default = null, Group = "gen", HelpText = "Select a reference flavor.")]
+    public string? ReferenceFlavor { get; set; }
+
+    [Option("gen", Default = false, Group = "gen", HelpText = "Generate references with flavor.")]
     public bool GenerateDefaultReferences { get; set; }
 }
