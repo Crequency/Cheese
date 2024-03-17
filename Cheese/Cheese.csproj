@@ -1,0 +1,43 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net8.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <AssemblyVersion>$(Version)</AssemblyVersion>
+        <FileVersion>$(Version)</FileVersion>
+        <Version>24.10.$([System.DateTime]::UtcNow.Date.Subtract($([System.DateTime]::Parse("2024-02-07"))).TotalDays).$([System.Math]::Floor($([System.DateTime]::UtcNow.TimeOfDay.TotalMinutes)))</Version>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <Title>Cheese</Title>
+        <Authors>Dynesshely</Authors>
+        <Company>Crequency</Company>
+        <Description>A new generation of project scaffolding tool</Description>
+        <PackageLicenseExpression>AGPL-3.0-only</PackageLicenseExpression>
+        <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+        <PackageIcon>icon.png</PackageIcon>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageTags>cheese;toolchain;scaffolding</PackageTags>
+        <PackageProjectUrl>https://github.com/Crequency/Cheese/</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/Crequency/Cheese/</RepositoryUrl>
+        <PackAsTool>True</PackAsTool>
+        <ToolCommandName>cheese</ToolCommandName>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <None Include="..\README.md" Pack="True" PackagePath="\"/>
+        <None Include="icon.png" Pack="True" PackagePath="\"/>
+    </ItemGroup>
+    
+    <ItemGroup>
+        <PackageReference Include="CommandLineParser" Version="2.9.1"/>
+        <PackageReference Include="Common.BasicHelper" Version="1.3.584.228"/>
+    </ItemGroup>
+
+</Project>

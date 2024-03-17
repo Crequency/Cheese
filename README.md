@@ -1,10 +1,31 @@
-﻿# Cheese
+﻿<p align="center">
+  <a href="#" target="_blank" rel="noopener noreferrer">
+    <img width="128" src="https://raw.githubusercontent.com/Crequency/Cheese/main/Cheese/icon.png" alt="Cheese Logo"/>
+  </a>
+</p>
 
-A util of `KitX Project` that helps to manage repository, fetch codes and develop plugins.
+<h1 align="center">Cheese</h1>
+
+<p align="center">
+  <img alt="GitHub License" src="https://img.shields.io/github/license/Crequency/Cheese"/>
+  <img alt="GitHub workflow status - mirror" src="https://img.shields.io/github/actions/workflow/status/Crequency/Cheese/mirror.yml"/>
+  <img alt="Nuget version" src="https://img.shields.io/nuget/v/Cheese">
+  <img alt="Nuget download" src="https://img.shields.io/nuget/dt/Cheese">
+  <img alt="GitHub issues" src="https://img.shields.io/github/issues/Crequency/Cheese">
+  <img alt="GitHub pull requests" src="https://img.shields.io/github/issues-pr/Crequency/Cheese">
+</p>
+
+<p align="center">
+  <img src="https://profile-counter.glitch.me/Crequency-Cheese/count.svg">
+</p>
+
+# About
+
+A new generation of project scaffolding tool to make your development process more effective with half the effort.
 
 ## Installation
 
-Install Cheese by dotnet tool:
+Install `Cheese` by dotnet tool:
 
 ```shell
 dotnet tool install --global Crequency.Cheese
@@ -12,45 +33,55 @@ dotnet tool install --global Crequency.Cheese
 
 ## Usage
 
-`Cheese` support develop KitX Project Components and KitX plugins.
+### Initialize
 
-Cheese will detect plugin project type automatically.
+You can use `init` command from `Cheese` to clone a repo and setup it.
 
-- When you develop a KitX Project Components, `KitX Project` commands will be available.
-- When you develop a KitX Plugin, `Plugins Development` commands will be available.
+For example:
 
-### KitX Project
+```shell
+cheese init Crequency/KitX.github
+# We use protocol suffix including "github", "gitlab", "gitee"
+# The default protocol is github, so you can execute: `cheese setup Crequency/KitX`
+```
 
-- `init` - Init `KitX Project` repo with submodules from [GitHub](https://github.com/Crequency/KitX) or other sources.
-    - After repo cloned, Cheese will requires you to select which fields you want to develop with.
-- `build` - Build the repository.
-- `clean` - Clean the repository.
-- `commit` - Commit the changes to the current Git repository. This command will use Crequency commit message format.
-- `fetch` - Fetch the subpackages required by the repository recursively.
-- `publish` - Publish the repository to the specified directory. This command will run `fetch` and `build` before publishing. Then run publish scripts if exists.
-- `test` - Run tests for the repository.
-- `doctor` - Check and try to fix your development environment.
+This command will clone `Crequency/KitX` repo from github, and check if there is `.cheese` folder.
 
-For `build`, `clean`, `commit`, `fetch`, `publish`, `test`, `doctor` commands you can append field name like: [dashboard, mobile, installer, website, ...]
+With `.cheese` folder exists, the init action will be execute automatically.
 
-### Plugins Development
+> In any folder, execute pure `cheese init` will only create `.cheese` folder.
 
-- `create` - Create a new plugin.
-- `attach` - Attach to a project file and enter development mode.
-- `pack` - Pack the plugin to a KXP file.
+### Setup
 
-### Tool Commands
+### ToDo Commands
 
-- `unpack` - Unpack [`.kxp`, `.kxps`, `.kxpc`, `.kxpcs`] file to plugin files or plugins files.
+- commit
+- publish
+- i18n
+- doctor
+- test
+- docs
+- config
 
-## Profile
+## Update your project
 
-Cheese will use the profile file to manage the plugin.
+Your repo should have a `.cheese` folder in the root directory like:
 
-The profile file is a JSON file in the root directory of the plugin repo.
+```text
++ project
+  + .cheese
+  + src
+  + docs
+    README.md
+    LICENSE
+```
 
-The KitX plugin profile file is named `plugin.json`.
+You can create this folder by `cheese init` command.
 
 ## Contributors
 
 [![Contributors](https://contrib.rocks/image?repo=Crequency/Cheese)](https://github.com/Crequency/Cheese/graphs/contributors)
+
+# Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=Crequency/Cheese&type=Timeline)](https://star-history.com/#Crequency/Cheese&Timeline)
