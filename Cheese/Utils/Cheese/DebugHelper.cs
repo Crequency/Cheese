@@ -18,11 +18,12 @@ public class DebugHelper
             ;
 
         if (onlyInDebugMode)
+        {
 #if DEBUG
             Action();
 #endif
-        else
-            Action();
+        }
+        else Action();
 
         return this;
 
