@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cheese.Flavors", "Cheese.Fl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cheese.Contract", "Cheese.Contract\Cheese.Contract.csproj", "{3DBE6ABF-ACF7-4499-A4D0-BE98D31DFA61}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cheese.Shared", "Cheese.Shared\Cheese.Shared.csproj", "{D78E8C97-0107-4A7F-9566-2DFF092E6048}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{3DBE6ABF-ACF7-4499-A4D0-BE98D31DFA61}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3DBE6ABF-ACF7-4499-A4D0-BE98D31DFA61}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3DBE6ABF-ACF7-4499-A4D0-BE98D31DFA61}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D78E8C97-0107-4A7F-9566-2DFF092E6048}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D78E8C97-0107-4A7F-9566-2DFF092E6048}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D78E8C97-0107-4A7F-9566-2DFF092E6048}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D78E8C97-0107-4A7F-9566-2DFF092E6048}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

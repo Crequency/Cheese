@@ -38,11 +38,30 @@ public class PathHelper
             x => x.Name.Equals(fileNameIgnoreCase, StringComparison.OrdinalIgnoreCase)
         );
 
+    public static string? WorkBase => Path.GetDirectoryName(Process.GetCurrentProcess().MainModule?.FileName)?.GetFullPath();
+
     public PathHelper()
     {
         var location = Environment.CurrentDirectory.GetFullPath();
 
         _ = FindSolutionUpward(location, ".cheese");
+    }
+    
+    public string? GetPath(string relativePath)
+    {
+        return BaseSlnDir is null ? null : Path.Combine(BaseSlnDir, relativePath);
+    }
+    
+    public PathHelper GetPath(string relativePath, out string? finalPath)
+    {
+        if (BaseSlnDir is null)
+        {
+            finalPath = null;
+            return this;
+        }
+
+        finalPath = Path.Combine(BaseSlnDir, relativePath);
+        return this;
     }
 
     public PathHelper ReadFile(string relativePath, Action<FileInfo>? onReadIn = null,

@@ -1,5 +1,9 @@
-﻿using System.Text;
+﻿using System.ComponentModel.Composition.Hosting;
+using System.Text;
 using System.Text.Json;
+using Cheese.Contract.References;
+using Cheese.Options;
+using Cheese.Shared.References;
 using Cheese.Utils.Cheese;
 
 namespace Cheese.Utils.References;
@@ -24,74 +28,57 @@ public class ReferencesManager
             {
                 var content = File.ReadAllText(file.FullName);
 
-                _references = JsonSerializer.Deserialize<List<ReferenceItem>>(content) ?? throw new FormatException("Bad format for `.cheese/references.json`.");
+                _references = JsonSerializer.Deserialize<List<ReferenceItem>>(content) ??
+                              throw new FormatException("Bad format for `.cheese/references.json`.");
             },
             error =>
             {
                 Console.WriteLine(
                     new StringBuilder()
-                    .AppendLine($"Error occured: {error.Message}")
-                    .AppendLine(error.StackTrace)
-                    .ToString()
+                        .AppendLine($"Error occured: {error.Message}")
+                        .AppendLine(error.StackTrace)
+                        .ToString()
                 );
             }
         );
     }
 
-    public ReferencesManager GenerateDefault()
+    public ReferencesManager GenerateWithFlavor(SetupOptions options)
     {
-        _references =
-        [
-            new ReferenceItem
-            {
-                Name = "Common.Activity",
-                Location = "Reference/Common.Activity",
-                Url = "git@github.com:Crequency/Common.Activity.git",
-                Branch = "dev=main",
-                Type = ReferenceType.GitRepo,
-            },
-            new ReferenceItem
-            {
-                Name = "Common.Algorithm",
-                Location = "Reference/Common.Algorithm",
-                Url = "git@github.com:Crequency/Common.Algorithm.git",
-                Branch = "dev=main",
-                Type = ReferenceType.GitRepo,
-            },
-            new ReferenceItem
-            {
-                Name = "Common.BasicHelper",
-                Location = "Reference/Common.BasicHelper",
-                Url = "git@github.com:Crequency/Common.BasicHelper.git",
-                Branch = "dev=main",
-                Type = ReferenceType.GitRepo,
-            },
-            new ReferenceItem
-            {
-                Name = "Common.Update",
-                Location = "Reference/Common.Update",
-                Url = "git@github.com:Crequency/Common.Update.git",
-                Branch = "dev=main",
-                Type = ReferenceType.GitRepo,
-            },
-            new ReferenceItem
-            {
-                Name = "Csharpell",
-                Location = "Reference/Csharpell",
-                Url = "git@github.com:Dynesshely/Csharpell.git",
-                Branch = "dev=main",
-                Type = ReferenceType.GitRepo,
-            },
-            new ReferenceItem
-            {
-                Name = "XamlMultiLanguageEditor",
-                Location = "KitX SDK/Reference/XamlMultiLanguageEditor",
-                Url = "git@github.com:Dynesshely/XamlMultiLanguageEditor.git",
-                Branch = "dev=main",
-                Type = ReferenceType.GitRepo,
-                InSubmodule = true,
-            },
-        ];
+        var path = PathHelper.WorkBase;
+
+        ArgumentNullException.ThrowIfNull(path, nameof(path));
+
+        if (options.Verbose)
+            Console.WriteLine($"# Going to load plugins from `*.dll` with {nameof(IReferencesProvider)} implemented.");
+
+        var catalog = new DirectoryCatalog(path, "*.dll");
+
+        var container = new CompositionContainer(catalog);
+
+        var sub = container.GetExportedValues<IReferencesProvider>().ToList();
+
+        var target = sub.FirstOrDefault(
+            x => x.GetProviderIdentity().ToLower().Equals(options.ReferenceFlavor?.ToLower())
+        );
+
+        ArgumentNullException.ThrowIfNull(target, nameof(target));
+
+        if (options.DryRun)
+        {
+            Console.WriteLine(
+                new StringBuilder()
+                    .AppendLine($"# We found {sub.Count} plugins in {path} with `*.dll` pattern")
+                    .AppendLine($"# Going to generate below content at {PathHelper.Instance.GetPath(ConfigPath)}")
+                    .AppendLine()
+                    .AppendLine(JsonSerializer.Serialize(target.GetReferences().ToList(), SerializerOptions))
+                    .ToString()
+            );
+
+            return this;
+        }
+
+        _references = target.GetReferences().ToList();
 
         SaveAll();
 
@@ -129,9 +116,9 @@ public class ReferencesManager
             {
                 Console.WriteLine(
                     new StringBuilder()
-                    .AppendLine($"Error occured: {error.Message}")
-                    .AppendLine(error.StackTrace)
-                    .ToString()
+                        .AppendLine($"Error occured: {error.Message}")
+                        .AppendLine(error.StackTrace)
+                        .ToString()
                 );
             },
             () => Console.WriteLine($"References saved at `{ConfigPath}`")

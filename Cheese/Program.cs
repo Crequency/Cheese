@@ -20,7 +20,7 @@ Parser.Default.ParseArguments<Options, InitializeOptions, SetupOptions, PublishO
     .WithParsed<SetupOptions>(options =>
     {
         if (options.GenerateDefaultReferences)
-            ReferencesManager.Instance.GenerateDefault();
+            ReferencesManager.Instance.GenerateWithFlavor(options);
 
         if (options.SetupReference)
             ReferencesManager.Instance.SetupAll();
