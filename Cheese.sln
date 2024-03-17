@@ -5,6 +5,10 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cheese", "Cheese\Cheese.csproj", "{09A0DDB2-6C74-4D82-847A-305CCEBB65C5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cheese.Flavors", "Cheese.Flavors\Cheese.Flavors.csproj", "{E6A73E46-3F80-46A6-825B-13031323FB2D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cheese.Contract", "Cheese.Contract\Cheese.Contract.csproj", "{3DBE6ABF-ACF7-4499-A4D0-BE98D31DFA61}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +22,13 @@ Global
 		{09A0DDB2-6C74-4D82-847A-305CCEBB65C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{09A0DDB2-6C74-4D82-847A-305CCEBB65C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{09A0DDB2-6C74-4D82-847A-305CCEBB65C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E6A73E46-3F80-46A6-825B-13031323FB2D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6A73E46-3F80-46A6-825B-13031323FB2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6A73E46-3F80-46A6-825B-13031323FB2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6A73E46-3F80-46A6-825B-13031323FB2D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3DBE6ABF-ACF7-4499-A4D0-BE98D31DFA61}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3DBE6ABF-ACF7-4499-A4D0-BE98D31DFA61}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3DBE6ABF-ACF7-4499-A4D0-BE98D31DFA61}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3DBE6ABF-ACF7-4499-A4D0-BE98D31DFA61}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
