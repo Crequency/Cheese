@@ -2,7 +2,7 @@
 
 namespace Cheese.Options;
 
-[Verb("publish", HelpText = "Run KitX Publisher and get the releases.")]
+[Verb("publish", HelpText = "Run publisher and get the releases.")]
 public class PublishOptions : Options
 {
 

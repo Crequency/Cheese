@@ -52,8 +52,6 @@ public class I18nManager
 
                 "pwsh".ExecuteAsCommand(args: args, findInPath: true);
                 break;
-            default:
-                break;
         }
 
         return this;

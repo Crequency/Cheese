@@ -3,50 +3,54 @@ using Common.BasicHelper.Utils.Extensions;
 
 namespace Cheese.Utils.Cheese;
 
-internal class PathHelper
+public class PathHelper
 {
     private static PathHelper? _instance;
 
     public static PathHelper Instance => _instance ??= new();
 
-    private string? baseSlnDir;
+    private string? _baseSlnDir;
 
-    public string? BaseSlnDir => baseSlnDir;
+    public string? BaseSlnDir => _baseSlnDir;
 
-    private bool FindSolutionUpward(string startLocation, string solutionFileName)
+    private bool FindSolutionUpward(string startLocation, string cheeseFolderName)
     {
         var currentDirInfo = new DirectoryInfo(startLocation);
 
-        if (!currentDirInfo.Exists || currentDirInfo.Parent is null || CheckForFile(currentDirInfo, solutionFileName))
+        if (!currentDirInfo.Exists || currentDirInfo.Parent is null || CheckDirectory(currentDirInfo, cheeseFolderName))
         {
-            var path = Path.Combine(currentDirInfo.FullName, solutionFileName);
-            if (File.Exists(path))
+            var path = Path.Combine(currentDirInfo.FullName, cheeseFolderName);
+
+            if (Directory.Exists(path))
             {
-                baseSlnDir = currentDirInfo.FullName;
+                _baseSlnDir = currentDirInfo.FullName;
                 return true;
             }
             else return false;
         }
 
-        return FindSolutionUpward(currentDirInfo.Parent.FullName, solutionFileName);
+        return FindSolutionUpward(currentDirInfo.Parent.FullName, cheeseFolderName);
     }
 
-    private static bool CheckForFile(DirectoryInfo directory, string fileNameIgnoreCase) => directory.GetFiles().Any(
-        x => x.Name.Equals(fileNameIgnoreCase, StringComparison.OrdinalIgnoreCase)
-    );
+    private static bool CheckDirectory(DirectoryInfo directory, string fileNameIgnoreCase) => directory
+        .GetDirectories()
+        .Any(
+            x => x.Name.Equals(fileNameIgnoreCase, StringComparison.OrdinalIgnoreCase)
+        );
 
     public PathHelper()
     {
         var location = Environment.CurrentDirectory.GetFullPath();
 
-        _ = FindSolutionUpward(location, "KitX.sln");
+        _ = FindSolutionUpward(location, ".cheese");
     }
 
-    public PathHelper ReadFile(string relativePath, Action<FileInfo>? onReadIn = null, Action<Exception>? onError = null)
+    public PathHelper ReadFile(string relativePath, Action<FileInfo>? onReadIn = null,
+        Action<Exception>? onError = null)
     {
         if (BaseSlnDir is null)
         {
-            onError?.Invoke(new InvalidOperationException("We're not in KitX repo."));
+            onError?.Invoke(new InvalidOperationException("We're not in a cheese project."));
 
             return this;
         }
@@ -65,11 +69,12 @@ internal class PathHelper
         return this;
     }
 
-    public PathHelper WriteFile(string relativePath, string content, Action<Exception>? onError = null, Action? onSucceeded = null)
+    public PathHelper WriteFile(string relativePath, string content, Action<Exception>? onError = null,
+        Action? onSucceeded = null)
     {
         if (BaseSlnDir is null)
         {
-            onError?.Invoke(new InvalidOperationException("We're not in KitX repo."));
+            onError?.Invoke(new InvalidOperationException("We're not in a cheese project."));
 
             return this;
         }
@@ -94,13 +99,13 @@ internal class PathHelper
     {
         if (BaseSlnDir is null) return this;
 
-        var old_location = Path.GetFullPath(".");
+        var oldLocation = Path.GetFullPath(".");
 
-        var new_location = Path.Combine(BaseSlnDir, relativeBaseDir);
+        var newLocation = Path.Combine(BaseSlnDir, relativeBaseDir);
 
-        Environment.CurrentDirectory = new_location;
+        Environment.CurrentDirectory = newLocation;
 
-        var StartInfo = new ProcessStartInfo
+        var startInfo = new ProcessStartInfo
         {
             FileName = cmd,
             Arguments = args,
@@ -111,7 +116,7 @@ internal class PathHelper
 
         Console.WriteLine($"Executing: {cmd} {args}");
 
-        var process = Process.Start(StartInfo);
+        var process = Process.Start(startInfo);
 
         process?.WaitForExit();
 
@@ -120,7 +125,7 @@ internal class PathHelper
             Console.WriteLine($"Process exited with return value {process?.ExitCode}");
         }
 
-        Environment.CurrentDirectory = old_location;
+        Environment.CurrentDirectory = oldLocation;
 
         return this;
     }

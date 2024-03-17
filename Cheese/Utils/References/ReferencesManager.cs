@@ -10,21 +10,21 @@ public class ReferencesManager
 
     public static ReferencesManager Instance => _instance ??= new();
 
-    private List<ReferenceItem>? references;
+    private List<ReferenceItem>? _references;
 
-    private const string CONFIG_PATH = ".cheese/references.json";
+    private const string ConfigPath = ".cheese/references.json";
 
-    private static readonly JsonSerializerOptions serializerOptions = new() { WriteIndented = true };
+    private static readonly JsonSerializerOptions SerializerOptions = new() { WriteIndented = true };
 
-    public ReferencesManager()
+    private ReferencesManager()
     {
         PathHelper.Instance.ReadFile(
-            CONFIG_PATH,
+            ConfigPath,
             file =>
             {
                 var content = File.ReadAllText(file.FullName);
 
-                references = JsonSerializer.Deserialize<List<ReferenceItem>>(content) ?? throw new FormatException("Bad format for `.cheese/references.json`.");
+                _references = JsonSerializer.Deserialize<List<ReferenceItem>>(content) ?? throw new FormatException("Bad format for `.cheese/references.json`.");
             },
             error =>
             {
@@ -40,13 +40,14 @@ public class ReferencesManager
 
     public ReferencesManager GenerateDefault()
     {
-        references =
+        _references =
         [
             new ReferenceItem
             {
                 Name = "Common.Activity",
                 Location = "Reference/Common.Activity",
                 Url = "git@github.com:Crequency/Common.Activity.git",
+                Branch = "dev=main",
                 Type = ReferenceType.GitRepo,
             },
             new ReferenceItem
@@ -54,6 +55,7 @@ public class ReferencesManager
                 Name = "Common.Algorithm",
                 Location = "Reference/Common.Algorithm",
                 Url = "git@github.com:Crequency/Common.Algorithm.git",
+                Branch = "dev=main",
                 Type = ReferenceType.GitRepo,
             },
             new ReferenceItem
@@ -61,6 +63,7 @@ public class ReferencesManager
                 Name = "Common.BasicHelper",
                 Location = "Reference/Common.BasicHelper",
                 Url = "git@github.com:Crequency/Common.BasicHelper.git",
+                Branch = "dev=main",
                 Type = ReferenceType.GitRepo,
             },
             new ReferenceItem
@@ -68,6 +71,7 @@ public class ReferencesManager
                 Name = "Common.Update",
                 Location = "Reference/Common.Update",
                 Url = "git@github.com:Crequency/Common.Update.git",
+                Branch = "dev=main",
                 Type = ReferenceType.GitRepo,
             },
             new ReferenceItem
@@ -75,6 +79,7 @@ public class ReferencesManager
                 Name = "Csharpell",
                 Location = "Reference/Csharpell",
                 Url = "git@github.com:Dynesshely/Csharpell.git",
+                Branch = "dev=main",
                 Type = ReferenceType.GitRepo,
             },
             new ReferenceItem
@@ -82,6 +87,7 @@ public class ReferencesManager
                 Name = "XamlMultiLanguageEditor",
                 Location = "KitX SDK/Reference/XamlMultiLanguageEditor",
                 Url = "git@github.com:Dynesshely/XamlMultiLanguageEditor.git",
+                Branch = "dev=main",
                 Type = ReferenceType.GitRepo,
                 InSubmodule = true,
             },
@@ -94,9 +100,9 @@ public class ReferencesManager
 
     public ReferencesManager SetupAll()
     {
-        if (references is null) return this;
+        if (_references is null) return this;
 
-        foreach (var item in references)
+        foreach (var item in _references)
         {
             switch (item.Type)
             {
@@ -117,8 +123,8 @@ public class ReferencesManager
     public ReferencesManager SaveAll()
     {
         PathHelper.Instance.WriteFile(
-            CONFIG_PATH,
-            JsonSerializer.Serialize(references, serializerOptions),
+            ConfigPath,
+            JsonSerializer.Serialize(_references, SerializerOptions),
             error =>
             {
                 Console.WriteLine(
@@ -128,7 +134,7 @@ public class ReferencesManager
                     .ToString()
                 );
             },
-            () => Console.WriteLine($"References saved at `{CONFIG_PATH}`")
+            () => Console.WriteLine($"References saved at `{ConfigPath}`")
         );
 
         return this;

@@ -2,7 +2,7 @@
 
 namespace Cheese.Options;
 
-[Verb("setup", HelpText = "Setup KitX dev environment.")]
+[Verb("setup", HelpText = "Setup dev environment.")]
 public class SetupOptions : Options
 {
     [Option("reference", Default = false, HelpText = "Setup reference projects.")]

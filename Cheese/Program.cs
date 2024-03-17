@@ -2,39 +2,21 @@
 using Cheese.Options;
 using Cheese.Utils.Cheese;
 using Cheese.Utils.I18n;
+using Cheese.Utils.Initializer;
 using Cheese.Utils.References;
 using CommandLine;
 
-var version = Assembly.GetExecutingAssembly().GetName().Version;
+var assembly = Assembly.GetExecutingAssembly();
 
-var versionText = $"v{version?.Major}.{version?.Minor}.{version?.MinorRevision} ({version?.Build})";
+var version = assembly.GetName().Version;
 
-Console.WriteLine(
-    $"""
-    Cheese {versionText} {Environment.OSVersion}
-    The new generation cli tool for KitX Project.
+var versionText = $"v{version?.Major}.{version?.Minor}.{version?.Build} ({version?.MinorRevision})";
 
-    """
-);
-
-Parser.Default.ParseArguments<Options, SetupOptions, PublishOptions, I18nOptions, object>(args)
-    .WithParsed<Options>(options =>
-    {
-        if (options.Verbose)
-            Console.WriteLine(
-                $"""
-                # sudo: {Environment.IsPrivilegedProcess}
-                # exe:  {Environment.ProcessPath}
-                # cmd:  {Environment.CommandLine}
-                # dir:  {Environment.CurrentDirectory}
-
-                Current KitX repo directory: {PathHelper.Instance.BaseSlnDir}
-                """
-            );
-
-        if (PathHelper.Instance.BaseSlnDir is null)
-            throw new InvalidOperationException("You must run Cheese in a KitX repo directory.");
-    })
+Parser.Default.ParseArguments<Options, InitializeOptions, SetupOptions, PublishOptions, I18nOptions, object>(args)
+    .WithParsed<Options>(options => options.Execute(versionText: versionText))
+    // Parse command "init"
+    .WithParsed<InitializeOptions>(options => Initializer.Instance.Execute(options))
+    // Parse command "setup"
     .WithParsed<SetupOptions>(options =>
     {
         if (options.GenerateDefaultReferences)
@@ -43,13 +25,11 @@ Parser.Default.ParseArguments<Options, SetupOptions, PublishOptions, I18nOptions
         if (options.SetupReference)
             ReferencesManager.Instance.SetupAll();
     })
+    // Parse command "publish"
     .WithParsed<PublishOptions>(options => Publisher.Instance.Execute(options))
+    // Parse command "i18n"
     .WithParsed<I18nOptions>(options => I18nManager.Instance.Execute(options))
     ;
 
-#if DEBUG
 // In debug mode, read the console output before closing the app
-Console.WriteLine();
-Console.WriteLine("Press any key to exit cheese ...");
-Console.ReadLine();
-#endif
+DebugHelper.Instance.RequestAnyKey(onlyInDebugMode: true);
