@@ -8,7 +8,7 @@
 
 <p align="center">
   <img alt="GitHub License" src="https://img.shields.io/github/license/Crequency/Cheese"/>
-  <!--<img alt="GitHub workflow status" src="https://img.shields.io/github/actions/workflow/status/Crequency/Cheese/build.yml"/>-->
+  <img alt="GitHub workflow status - mirror" src="https://img.shields.io/github/actions/workflow/status/Crequency/Cheese/mirror.yml"/>
   <img alt="Nuget version" src="https://img.shields.io/nuget/v/Cheese">
   <img alt="Nuget download" src="https://img.shields.io/nuget/dt/Cheese">
   <img alt="GitHub issues" src="https://img.shields.io/github/issues/Crequency/Cheese">
