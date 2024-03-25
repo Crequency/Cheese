@@ -43,14 +43,20 @@ public class ReferencesManager
         );
     }
 
-    public ReferencesManager GenerateWithFlavor(SetupOptions options)
+    public ReferencesManager GenerateWithFlavor(ReferenceOptions options)
     {
         var path = PathHelper.WorkBase;
 
         ArgumentNullException.ThrowIfNull(path, nameof(path));
 
         if (options.Verbose)
-            Console.WriteLine($"# Going to load plugins from `*.dll` with {nameof(IReferencesProvider)} implemented.");
+            Console.WriteLine(
+                new StringBuilder()
+                    .AppendLine(
+                        $"# Going to load plugins from `*.dll` with {nameof(IReferencesProvider)} implemented, ")
+                    .AppendLine($"# in {path}")
+                    .ToString()
+            );
 
         var catalog = new DirectoryCatalog(path, "*.dll");
 
@@ -59,7 +65,7 @@ public class ReferencesManager
         var sub = container.GetExportedValues<IReferencesProvider>().ToList();
 
         var target = sub.FirstOrDefault(
-            x => x.GetProviderIdentity().ToLower().Equals(options.ReferenceFlavor?.ToLower())
+            x => x.GetProviderIdentity().ToLower().Equals(options.Flavor?.ToLower())
         );
 
         ArgumentNullException.ThrowIfNull(target, nameof(target));
@@ -104,6 +110,13 @@ public class ReferencesManager
             }
         }
 
+        return this;
+    }
+
+    public ReferencesManager Status(string pattern = "*")
+    {
+        
+        
         return this;
     }
 
