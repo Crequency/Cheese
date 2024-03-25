@@ -1,4 +1,5 @@
-﻿using CommandLine;
+﻿using Cheese.Utils.References;
+using CommandLine;
 
 namespace Cheese.Options;
 
@@ -7,10 +8,15 @@ public class SetupOptions : Options
 {
     [Option("reference", Default = false, HelpText = "Setup reference projects.")]
     public bool SetupReference { get; set; }
+}
 
-    [Option('f', "flavor", Default = null, Group = "gen", HelpText = "Select a reference flavor.")]
-    public string? ReferenceFlavor { get; set; }
-
-    [Option("gen", Default = false, Group = "gen", HelpText = "Generate references with flavor.")]
-    public bool GenerateDefaultReferences { get; set; }
+public static class SetupOptionsExtensions
+{
+    public static SetupOptions Execute(this SetupOptions options)
+    {
+        if (options.SetupReference)
+            ReferencesManager.Instance.SetupAll();
+        
+        return options;
+    }
 }

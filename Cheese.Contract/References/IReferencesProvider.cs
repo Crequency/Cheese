@@ -4,9 +4,7 @@ using Cheese.Shared.References;
 namespace Cheese.Contract.References;
 
 [InheritedExport]
-public interface IReferencesProvider
+public interface IReferencesProvider : IProvider
 {
-    public string GetProviderIdentity();
-    
     public IEnumerable<ReferenceItem> GetReferences();
 }
