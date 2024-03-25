@@ -7,6 +7,15 @@ namespace Cheese.Options;
 [Verb("reference", aliases: ["refer", "ref"], HelpText = "References management.")]
 public class ReferenceOptions : Options
 {
+    [Option("status", Group = "act", HelpText = "Show references status.")]
+    public bool Status { get; set; }
+    
+    [Option("fetch", HelpText = "Fetch repo from remote.")]
+    public bool Fetch { get; set; }
+    
+    [Option('u', "update", Group = "act", HelpText = "Update references.")]
+    public bool Update { get; set; }
+    
     [Option('s', "setup", Group = "act", HelpText = "Setup references.")]
     public bool Setup { get; set; }
 
@@ -23,9 +32,15 @@ public static class ReferenceOptionsExtensions
     {
         if (options.Generate)
             ReferencesManager.Instance.GenerateWithFlavor(options);
-
+        
         if (options.Setup)
             ReferencesManager.Instance.SetupAll();
+
+        if (options.Status)
+            ReferencesManager.Instance.Status(options);
+
+        if (options.Update)
+            ReferencesManager.Instance.UpdateAll();
 
         return options;
     }

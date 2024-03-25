@@ -9,6 +9,8 @@ public class ReferenceItem
     public string? Url { get; set; }
     
     public string? Branch { get; set; }
+    
+    public string? RemoteBranch { get; set; }
 
     public ReferenceType Type { get; set; } = ReferenceType.Unknown;
 

@@ -114,7 +114,7 @@ public class PathHelper
         return this;
     }
 
-    public PathHelper ExecuteCommand(string relativeBaseDir, string cmd, string args, out string? stdOutput, out string? stdError, out int exitCode)
+    public PathHelper ExecuteCommand(string relativeBaseDir, string cmd, string args, out string? stdOutput, out string? stdError, out int exitCode, bool showText = true)
     {
         stdOutput = null;
         stdError = null;
@@ -138,7 +138,7 @@ public class PathHelper
             CreateNoWindow = true,
         };
 
-        ConsoleHelper.Instance.AccentLine($"@ Executing: {cmd} {args}");
+        if (showText) ConsoleHelper.Instance.AccentLine($"@ Executing: {cmd} {args}");
 
         var process = Process.Start(startInfo);
 
@@ -152,7 +152,7 @@ public class PathHelper
 
         if (process?.ExitCode != 0)
         {
-            ConsoleHelper.Instance.ErrorLine($"@ Process exited with return value {process?.ExitCode}");
+            if (showText) ConsoleHelper.Instance.ErrorLine($"@ Process exited with return value {process?.ExitCode}");
         }
 
         Environment.CurrentDirectory = oldLocation;
