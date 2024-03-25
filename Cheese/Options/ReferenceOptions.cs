@@ -7,13 +7,13 @@ namespace Cheese.Options;
 [Verb("reference", aliases: ["refer", "ref"], HelpText = "References management.")]
 public class ReferenceOptions : Options
 {
-    [Option('s', "setup", HelpText = "Setup references.")]
+    [Option('s', "setup", Group = "act", HelpText = "Setup references.")]
     public bool Setup { get; set; }
 
-    [Option('g', "gen", Group = "gen", HelpText = "Generate references with flavor.")]
+    [Option('g', "gen", Group = "act", HelpText = "Generate references with flavor.")]
     public bool Generate { get; set; }
 
-    [Option("flavor", Group = "gen", Default = null, HelpText = "Select a reference flavor.")]
+    [Option("flavor", Default = null, HelpText = "Select a reference flavor.")]
     public string? Flavor { get; set; }
 }
 

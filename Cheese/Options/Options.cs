@@ -17,14 +17,15 @@ public static class OptionsExtensions
     public static Options Execute(this Options options)
     {
         if (options.Verbose)
-            Console.WriteLine(
+            ConsoleHelper.Instance.DebugLine(
                 $"""
                  # sudo: {Environment.IsPrivilegedProcess}
                  # exe:  {Environment.ProcessPath}
                  # cmd:  {Environment.CommandLine}
                  # dir:  {Environment.CurrentDirectory}
 
-                 Current cheese project directory: {PathHelper.Instance.BaseSlnDir}
+                 # Current cheese project directory: {PathHelper.Instance.BaseSlnDir}
+
                  """
             );
         

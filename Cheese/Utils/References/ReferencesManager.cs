@@ -50,13 +50,9 @@ public class ReferencesManager
         ArgumentNullException.ThrowIfNull(path, nameof(path));
 
         if (options.Verbose)
-            Console.WriteLine(
-                new StringBuilder()
-                    .AppendLine(
-                        $"# Going to load plugins from `*.dll` with {nameof(IReferencesProvider)} implemented, ")
-                    .AppendLine($"# in {path}")
-                    .ToString()
-            );
+            ConsoleHelper.Instance
+                .DebugLine($"# Going to load plugins from `*.dll` with {nameof(IReferencesProvider)}")
+                .DebugLine($"# Plugins located in {path}");
 
         var catalog = new DirectoryCatalog(path, "*.dll");
 
@@ -72,14 +68,12 @@ public class ReferencesManager
 
         if (options.DryRun)
         {
-            Console.WriteLine(
-                new StringBuilder()
-                    .AppendLine($"# We found {sub.Count} plugins in {path} with `*.dll` pattern")
-                    .AppendLine($"# Going to generate below content at {PathHelper.Instance.GetPath(ConfigPath)}")
-                    .AppendLine()
-                    .AppendLine(JsonSerializer.Serialize(target.GetReferences().ToList(), SerializerOptions))
-                    .ToString()
-            );
+            ConsoleHelper.Instance
+                .DebugLine($"# We found {sub.Count} plugins in {path} with `*.dll` pattern")
+                .DebugLine($"# Going to generate below content at {PathHelper.Instance.GetPath(ConfigPath)}")
+                .WriteLine("")
+                .DryRunLine(JsonSerializer.Serialize(target.GetReferences().ToList(), SerializerOptions))
+                ;
 
             return this;
         }
@@ -97,13 +91,17 @@ public class ReferencesManager
 
         foreach (var item in _references)
         {
+            ConsoleHelper.Instance.AccentLine($"@ {item.Name}");
+            
             switch (item.Type)
             {
                 case ReferenceType.Unknown:
                     break;
                 case ReferenceType.GitRepo:
                     var args = $"clone {item.Url} \"{item.Location}\"";
-                    PathHelper.Instance.ExecuteCommand("", "git", args);
+                    PathHelper.Instance.ExecuteCommand("", "git", args, out var stdOutput, out var stdError, out var exitCode);
+                    ConsoleHelper.Instance.SetForeground(ConsoleColor.DarkGray).WriteLine(stdOutput ?? string.Empty).GoBack();
+                    if (exitCode != 0) ConsoleHelper.Instance.ErrorLine(stdError ?? string.Empty);
                     break;
                 case ReferenceType.Binary:
                     break;
@@ -115,7 +113,22 @@ public class ReferencesManager
 
     public ReferencesManager Status(string pattern = "*")
     {
-        
+        if (_references is null) return this;
+
+        foreach (var item in _references)
+        {
+            ConsoleHelper.Instance.AccentLine($"@ {item.Name}");
+            
+            switch (item.Type)
+            {
+                case ReferenceType.Unknown:
+                    break;
+                case ReferenceType.GitRepo:
+                    break;
+                case ReferenceType.Binary:
+                    break;
+            }
+        }
         
         return this;
     }
