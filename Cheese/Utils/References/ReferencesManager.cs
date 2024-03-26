@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.Composition.Hosting;
 using System.Text;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 using Cheese.Contract.References;
 using Cheese.Options;
 using Cheese.Shared.References;
@@ -8,7 +9,7 @@ using Cheese.Utils.Cheese;
 
 namespace Cheese.Utils.References;
 
-public class ReferencesManager
+public partial class ReferencesManager
 {
     private static ReferencesManager? _instance;
 
@@ -87,40 +88,64 @@ public class ReferencesManager
         return this;
     }
 
-    public ReferencesManager SetupAll()
+    public ReferencesManager SetupAll(ReferenceOptions options)
     {
         if (_references is null) return this;
 
         foreach (var item in _references)
         {
             ConsoleHelper.Instance.AccentLine($"@ {item.Name}");
-            
+
             switch (item.Type)
             {
                 case ReferenceType.Unknown:
                     break;
                 case ReferenceType.GitRepo:
-                    var argsClone = $"clone {item.Url} \"{item.Location}\"";
+                    var targetUrl = item.Url;
+
+                    if (targetUrl is null) continue;
+
+                    if (options.ConvertSslLinkToHttpsLink && SslGitLinkRegex().IsMatch(targetUrl))
+                    {
+                        targetUrl = SslGitLinkRegex().Replace(targetUrl, "https://${hostname}/${username}/$1.git");
+                    }
+
+                    var argsClone = $"clone {targetUrl} \"{item.Location}\"";
                     var argsCheckout = $"checkout {item.Branch}";
-                    
+
                     var dir = PathHelper.Instance.GetPath(item.Location ?? "");
-                    
+
                     if (dir is null) continue;
 
-                    PathHelper.Instance.ExecuteCommand("", "git", argsClone, out var stdOutput, out var stdError, out var exitCode);
-                    ConsoleHelper.Instance.SetForeground(ConsoleColor.DarkGray).WriteLine(stdOutput ?? string.Empty).GoBack();
-                    
-                    if (exitCode != 0)
+                    if (options.DryRun)
                     {
-                        ConsoleHelper.Instance.ErrorLine(stdError ?? string.Empty);
-                        
-                        continue;
+                        ConsoleHelper.Instance.DebugLine($"# git {argsClone}");
                     }
-                    
-                    PathHelper.Instance.ExecuteCommand(dir, "git", argsCheckout, out var cStdOutput, out var cStdError, out var cExitCode);
-                    ConsoleHelper.Instance.SetForeground(ConsoleColor.DarkGray).WriteLine(cStdOutput ?? string.Empty).GoBack();
-                    
-                    if (cExitCode != 0) ConsoleHelper.Instance.ErrorLine(cStdError ?? string.Empty);
+                    else
+                    {
+                        PathHelper.Instance.ExecuteCommand("", "git", argsClone, out var stdOutput, out var stdError, out var exitCode);
+                        ConsoleHelper.Instance.SetForeground(ConsoleColor.DarkGray).WriteLine(stdOutput ?? string.Empty).GoBack();
+
+                        if (exitCode != 0)
+                        {
+                            ConsoleHelper.Instance.ErrorLine(stdError ?? string.Empty);
+
+                            continue;
+                        }
+                    }
+
+                    if (options.DryRun)
+                    {
+                        ConsoleHelper.Instance.DebugLine($"# git {argsCheckout}");
+                    }
+                    else
+                    {
+                        PathHelper.Instance.ExecuteCommand(dir, "git", argsCheckout, out var cStdOutput, out var cStdError, out var cExitCode);
+                        ConsoleHelper.Instance.SetForeground(ConsoleColor.DarkGray).WriteLine(cStdOutput ?? string.Empty).GoBack();
+
+                        if (cExitCode != 0) ConsoleHelper.Instance.ErrorLine(cStdError ?? string.Empty);
+                    }
+
                     break;
                 case ReferenceType.Binary:
                     break;
@@ -137,20 +162,20 @@ public class ReferencesManager
         foreach (var item in _references)
         {
             ConsoleHelper.Instance.AccentLine($"@ {item.Name}");
-            
+
             switch (item.Type)
             {
                 case ReferenceType.Unknown:
                     break;
                 case ReferenceType.GitRepo:
                     var dir = PathHelper.Instance.GetPath(item.Location ?? "");
-                    
+
                     if (dir is null) continue;
-                    
+
                     PathHelper.Instance.ExecuteCommand(dir, "git", "pull", out var stdOutput, out var stdError, out var exitCode);
-                    
+
                     ConsoleHelper.Instance.SetForeground(ConsoleColor.DarkGray).WriteLine(stdOutput ?? string.Empty).GoBack();
-                    
+
                     if (exitCode != 0) ConsoleHelper.Instance.ErrorLine(stdError ?? string.Empty);
                     break;
                 case ReferenceType.Binary:
@@ -170,7 +195,7 @@ public class ReferencesManager
         foreach (var item in _references)
         {
             ConsoleHelper.Instance.AccentLine($"@ {item.Name}");
-            
+
             switch (item.Type)
             {
                 case ReferenceType.Unknown:
@@ -179,12 +204,12 @@ public class ReferencesManager
                     if (item.Branch is null)
                     {
                         ConsoleHelper.Instance.ErrorLine($"@ {nameof(item.Branch)} property of {item.Name} is null");
-                        
+
                         continue;
                     }
 
                     var dir = PathHelper.Instance.GetPath(item.Location ?? "");
-                    
+
                     if (dir is null) continue;
 
                     if (options.Fetch)
@@ -206,7 +231,7 @@ public class ReferencesManager
                     if (remoteText.Equals(latestCommitHash)) remoteText = item.RemoteBranch;
 
                     finalResult.AppendLine($"{latestCommitHash} {item.Name} ({remoteText})");
-                    
+
                     break;
                 case ReferenceType.Binary:
                     break;
@@ -214,7 +239,7 @@ public class ReferencesManager
         }
 
         ConsoleHelper.Instance.WriteLine("").WriteLine(finalResult.ToString());
-        
+
         return this;
     }
 
@@ -237,4 +262,7 @@ public class ReferencesManager
 
         return this;
     }
+
+    [GeneratedRegex(@"^git@(?<hostname>[\w\.]+):(?<username>[\w-]+)/([\w-\.]+).git$")]
+    private static partial Regex SslGitLinkRegex();
 }

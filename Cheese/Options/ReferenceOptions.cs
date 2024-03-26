@@ -18,6 +18,9 @@ public class ReferenceOptions : Options
     
     [Option('s', "setup", Group = "act", HelpText = "Setup references.")]
     public bool Setup { get; set; }
+    
+    [Option("convert-ssl-link-to-https-link", HelpText = "Indicate will cheese convert ssl link to https link.")]
+    public bool ConvertSslLinkToHttpsLink { get; set; }
 
     [Option('g', "gen", Group = "act", HelpText = "Generate references with flavor.")]
     public bool Generate { get; set; }
@@ -34,7 +37,7 @@ public static class ReferenceOptionsExtensions
             ReferencesManager.Instance.GenerateWithFlavor(options);
         
         if (options.Setup)
-            ReferencesManager.Instance.SetupAll();
+            ReferencesManager.Instance.SetupAll(options);
 
         if (options.Status)
             ReferencesManager.Instance.Status(options);
