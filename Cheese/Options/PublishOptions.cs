@@ -1,4 +1,5 @@
-﻿using CommandLine;
+﻿using Cheese.Utils.Publisher;
+using CommandLine;
 
 namespace Cheese.Options;
 

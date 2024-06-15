@@ -1,6 +1,5 @@
 using Cheese.Utils.References;
 using CommandLine;
-using CommandLine.Text;
 
 namespace Cheese.Options;
 
