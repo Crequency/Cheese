@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.Composition.Hosting;
-using System.Text;
+﻿using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using Cheese.Contract.References;
@@ -46,42 +45,42 @@ public partial class ReferencesManager
 
     public ReferencesManager GenerateWithFlavor(ReferenceOptions options)
     {
-        var path = PathHelper.WorkBase;
-
-        ArgumentNullException.ThrowIfNull(path, nameof(path));
-
-        if (options.Verbose)
-            ConsoleHelper.Instance
-                .DebugLine($"# Going to load plugins from `*.dll` with {nameof(IReferencesProvider)}")
-                .DebugLine($"# Plugins located in {path}")
-                .DebugLine("")
-                ;
-
-        var catalog = new DirectoryCatalog(path, "*.dll");
-
-        var container = new CompositionContainer(catalog);
-
-        var sub = container.GetExportedValues<IReferencesProvider>().ToList();
-
-        var target = sub.FirstOrDefault(
-            x => x.GetProviderIdentity().ToLower().Equals(options.Flavor?.ToLower())
-        );
-
-        ArgumentNullException.ThrowIfNull(target, nameof(target));
-
-        if (options.DryRun)
-        {
-            ConsoleHelper.Instance
-                .DebugLine($"# We found {sub.Count} plugins in {path} with `*.dll` pattern")
-                .DebugLine($"# Going to generate below content at {PathHelper.Instance.GetPath(ConfigPath)}")
-                .WriteLine("")
-                .DryRunLine(JsonSerializer.Serialize(target.GetReferences().ToList(), SerializerOptions))
-                ;
-
-            return this;
-        }
-
-        _references = target.GetReferences().ToList();
+        // var path = PathHelper.WorkBase;
+        //
+        // ArgumentNullException.ThrowIfNull(path, nameof(path));
+        //
+        // if (options.Verbose)
+        //     ConsoleHelper.Instance
+        //         .DebugLine($"# Going to load plugins from `*.dll` with {nameof(IReferencesProvider)}")
+        //         .DebugLine($"# Plugins located in {path}")
+        //         .DebugLine("")
+        //         ;
+        //
+        // var catalog = new DirectoryCatalog(path, "*.dll");
+        //
+        // var container = new CompositionContainer(catalog);
+        //
+        // var sub = container.GetExportedValues<IReferencesProvider>().ToList();
+        //
+        // var target = sub.FirstOrDefault(
+        //     x => x.GetProviderIdentity().ToLower().Equals(options.Flavor?.ToLower())
+        // );
+        //
+        // ArgumentNullException.ThrowIfNull(target, nameof(target));
+        //
+        // if (options.DryRun)
+        // {
+        //     ConsoleHelper.Instance
+        //         .DebugLine($"# We found {sub.Count} plugins in {path} with `*.dll` pattern")
+        //         .DebugLine($"# Going to generate below content at {PathHelper.Instance.GetPath(ConfigPath)}")
+        //         .WriteLine("")
+        //         .DryRunLine(JsonSerializer.Serialize(target.GetReferences().ToList(), SerializerOptions))
+        //         ;
+        //
+        //     return this;
+        // }
+        //
+        // _references = target.GetReferences().ToList();
 
         SaveAll();
 

@@ -1,6 +1,8 @@
 namespace Cheese.Shared;
 
-public class CheeseProcess
+public class CoreProcess
 {
+    
+    
     public RepoInfo? RepoInfo;
 }
