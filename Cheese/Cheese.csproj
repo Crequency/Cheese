@@ -44,7 +44,6 @@
     
     <ItemGroup>
       <ProjectReference Include="..\Cheese.Contract\Cheese.Contract.csproj" />
-      <ProjectReference Include="..\Cheese.Flavors\Cheese.Flavors.csproj" />
       <ProjectReference Include="..\Cheese.Shared\Cheese.Shared.csproj" />
     </ItemGroup>
 
