@@ -6,4 +6,8 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Common.BasicHelper" Version="1.3.584.228" />
+    </ItemGroup>
+
 </Project>

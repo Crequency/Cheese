@@ -1,6 +1,6 @@
 using Cheese.Shared.References;
 
-namespace Cheese.Contract.References;
+namespace Cheese.Contract.Providers;
 
 public interface IReferencesProvider : IProvider
 {
