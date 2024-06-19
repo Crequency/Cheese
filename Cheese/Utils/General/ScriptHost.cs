@@ -1,7 +1,6 @@
 using System.Diagnostics;
 using System.Reflection;
 using System.Text;
-using Cheese.Contract;
 using Csharpell.Core;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Scripting;
@@ -38,15 +37,12 @@ public class ScriptHost
                     options = options
                             .WithReferences(Assembly.GetExecutingAssembly())
                             // This line and next line are to make sure namespaces all imported
-                            .WithReferences(Assembly.GetAssembly(typeof(IProvider)))
                             .WithReferences(Assembly.GetAssembly(typeof(ScriptHost)))
                             .WithImports(
                                 "Cheese",
                                 "Cheese.Utils",
                                 "Cheese.Utils.General",
                                 "Cheese.Utils.References",
-                                "Cheese.Contract",
-                                "Cheese.Contract.Providers",
                                 "Cheese.Shared",
                                 "Cheese.Shared.PipeLine",
                                 "Cheese.Shared.References"

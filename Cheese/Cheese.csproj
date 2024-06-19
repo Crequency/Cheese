@@ -42,7 +42,6 @@
     </ItemGroup>
     
     <ItemGroup>
-      <ProjectReference Include="..\Cheese.Contract\Cheese.Contract.csproj" />
       <ProjectReference Include="..\Cheese.Shared\Cheese.Shared.csproj" />
     </ItemGroup>
 
