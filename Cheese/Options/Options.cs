@@ -7,7 +7,7 @@ public class Options
 {
     [Option("verbose", HelpText = "More details will be printed out.")]
     public bool Verbose { get; set; }
-    
+
     [Option("dry-run", HelpText = "Display what the command will do instead of executing directly.")]
     public bool DryRun { get; set; }
 }
@@ -28,7 +28,7 @@ public static class OptionsExtensions
 
                  """
             );
-        
+
         return options;
     }
 }

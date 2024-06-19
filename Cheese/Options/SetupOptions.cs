@@ -1,5 +1,5 @@
 ﻿using CommandLine;
-using ReferencesManager = Cheese.Utils.Managers.ReferencesManager;
+using Cheese.Utils.Managers;
 
 namespace Cheese.Options;
 
