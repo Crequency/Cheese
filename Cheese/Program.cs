@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 using Cheese.Options;
-using Cheese.Utils.Cheese;
+using Cheese.Utils.General;
 using CommandLine;
 
 var assembly = Assembly.GetExecutingAssembly();

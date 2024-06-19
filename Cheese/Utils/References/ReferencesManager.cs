@@ -2,7 +2,7 @@
 using System.Text.RegularExpressions;
 using Cheese.Options;
 using Cheese.Shared.References;
-using Cheese.Utils.Cheese;
+using Cheese.Utils.General;
 
 namespace Cheese.Utils.References;
 

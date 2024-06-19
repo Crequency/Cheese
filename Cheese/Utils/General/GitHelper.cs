@@ -1,4 +1,4 @@
-namespace Cheese.Utils.Cheese;
+namespace Cheese.Utils.General;
 
 public class GitHelper
 {

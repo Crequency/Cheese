@@ -1,6 +1,6 @@
 using System.Text;
 
-namespace Cheese.Utils.Cheese;
+namespace Cheese.Utils.General;
 
 public class DebugHelper
 {

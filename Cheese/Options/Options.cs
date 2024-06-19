@@ -1,4 +1,4 @@
-﻿using Cheese.Utils.Cheese;
+﻿using Cheese.Utils.General;
 using CommandLine;
 
 namespace Cheese.Options;

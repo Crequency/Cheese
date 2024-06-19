@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using Common.BasicHelper.Utils.Extensions;
 
-namespace Cheese.Utils.Cheese;
+namespace Cheese.Utils.General;
 
 public class PathHelper
 {
