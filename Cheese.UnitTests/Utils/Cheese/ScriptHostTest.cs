@@ -9,13 +9,13 @@ public class ScriptHostTest
     [Test]
     public void NamespaceAccessibilityTest()
     {
-        var code = """
-                   using Cheese.Utils.General;
-                   
-                   ConsoleHelper.Instance.WriteLine("Test");
-                   
-                   return "Done";
-                   """;
+        const string code = """
+                            using Cheese.Utils.General;
+
+                            ConsoleHelper.Instance.WriteLine("Test");
+
+                            return "Done";
+                            """;
 
         var task = ScriptHost.Instance.ExecuteCodesAsync(code, false);
 

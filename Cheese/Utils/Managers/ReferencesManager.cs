@@ -4,7 +4,7 @@ using Cheese.Options;
 using Cheese.Shared.References;
 using Cheese.Utils.General;
 
-namespace Cheese.Utils.References;
+namespace Cheese.Utils.Managers;
 
 public partial class ReferencesManager
 {

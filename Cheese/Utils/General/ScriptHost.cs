@@ -36,13 +36,13 @@ public class ScriptHost
                 {
                     options = options
                             .WithReferences(Assembly.GetExecutingAssembly())
-                            // This line and next line are to make sure namespaces all imported
+                            // This line is to make sure namespaces are all imported
                             .WithReferences(Assembly.GetAssembly(typeof(ScriptHost)))
                             .WithImports(
                                 "Cheese",
                                 "Cheese.Utils",
                                 "Cheese.Utils.General",
-                                "Cheese.Utils.References",
+                                "Cheese.Utils.Managers",
                                 "Cheese.Shared",
                                 "Cheese.Shared.PipeLine",
                                 "Cheese.Shared.References"
