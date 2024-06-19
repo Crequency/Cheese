@@ -83,7 +83,7 @@ public class PathHelper
             return this;
         }
 
-        onReadIn?.Invoke(new FileInfo(path));
+        onReadIn?.Invoke(new(path));
 
         return this;
     }

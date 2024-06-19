@@ -37,7 +37,7 @@
     
     <ItemGroup>
         <PackageReference Include="CommandLineParser" Version="2.9.1" />
-        <PackageReference Include="Csharpell.Core" Version="0.5.225.17" />
+        <PackageReference Include="Csharpell.Core" Version="0.5.335.689" />
         <PackageReference Include="Spectre.Console" Version="0.49.1" />
     </ItemGroup>
     

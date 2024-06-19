@@ -94,7 +94,7 @@ public class ConsoleHelper
     
     public ConsoleHelper DryRun(string content)
     {
-        SetForeground(ConsoleColor.DarkBlue)
+        SetForeground(ConsoleColor.DarkGray)
             .Write(content)
             .GoBack();
         
@@ -103,7 +103,7 @@ public class ConsoleHelper
     
     public ConsoleHelper DryRunLine(string content)
     {
-        SetForeground(ConsoleColor.DarkBlue)
+        SetForeground(ConsoleColor.DarkGray)
             .WriteLine(content)
             .GoBack();
         

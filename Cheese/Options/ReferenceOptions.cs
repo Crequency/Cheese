@@ -33,7 +33,7 @@ public static class ReferenceOptionsExtensions
             ReferencesManager.Instance.Status(options);
 
         if (options.Update)
-            ReferencesManager.Instance.UpdateAll();
+            ReferencesManager.Instance.UpdateAll(options);
 
         return options;
     }

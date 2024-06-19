@@ -16,7 +16,12 @@ public class ScriptHost
 
     private CSharpScriptEngine Engine => new();
 
-    public async Task<string?> ExecuteCodesAsync(string code, bool includeTimestamp = true, CancellationToken cancellationToken = default)
+    public async Task<object?> ExecuteCodesAsync(
+        string code,
+        bool includeTimestamp = true,
+        CancellationToken cancellationToken = default,
+        Action<Exception>? onError = null
+    )
     {
         var sw = new Stopwatch();
 
@@ -26,7 +31,7 @@ public class ScriptHost
 
         try
         {
-            var result = (await Engine.ExecuteAsync(
+            var result = await Engine.ExecuteAsync(
                 code,
                 options =>
                 {
@@ -41,7 +46,10 @@ public class ScriptHost
                                 "Cheese.Utils.General",
                                 "Cheese.Utils.References",
                                 "Cheese.Contract",
-                                "Cheese.Contract.Providers"
+                                "Cheese.Contract.Providers",
+                                "Cheese.Shared",
+                                "Cheese.Shared.PipeLine",
+                                "Cheese.Shared.References"
                             )
                             .WithLanguageVersion(LanguageVersion.Preview)
                         ;
@@ -51,7 +59,7 @@ public class ScriptHost
                 addDefaultImports: true,
                 runInReplMode: false,
                 cancellationToken: cancellationToken
-            ))?.ToString();
+            );
 
             sw.Stop();
 
@@ -59,7 +67,7 @@ public class ScriptHost
                     ? new StringBuilder()
                         .AppendLine($"[{begin:yyyy-MM-dd HH:mm:ss}] [I] Posted.")
                         .AppendLine($"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] [I] Ended, took {sw.ElapsedMilliseconds} ms.")
-                        .AppendLine(result)
+                        .AppendLine(result?.ToString())
                         .ToString()
                     : result
                 ;
@@ -68,12 +76,14 @@ public class ScriptHost
         {
             sw.Stop();
 
+            onError?.Invoke(e);
+
             return new StringBuilder()
-                    .AppendLine($"[{begin:yyyy-MM-dd HH:mm:ss}] [I] Posted.")
-                    .AppendLine($"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] [E] Exception caught after {sw.ElapsedMilliseconds} ms, Message: {e.Message}")
-                    .AppendLine(e.StackTrace)
-                    .ToString()
-                ;
+                .AppendLine($"[{begin:yyyy-MM-dd HH:mm:ss}] [I] Posted.")
+                .AppendLine($"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] [E] Exception caught after {sw.ElapsedMilliseconds} ms, Message: {e.Message}")
+                .AppendLine(e.StackTrace)
+                .ToString();
+            ;
         }
 
         ;

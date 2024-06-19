@@ -23,8 +23,26 @@ public partial class ReferencesManager
             file =>
             {
                 var script = File.ReadAllText(file.FullName);
-                
-                // ToDo: Execute provider script
+
+                var task = ScriptHost.Instance.ExecuteCodesAsync(script, false);
+
+                task.Wait();
+
+                var result = task.Result;
+
+                switch (result)
+                {
+                    case null:
+                        ConsoleHelper.Instance.ErrorLine("Your `references.cs` script returned null");
+                        return;
+                    case List<ReferenceItem> items:
+                        _references = items;
+                        break;
+                    default:
+                        ConsoleHelper.Instance.ErrorLine($"Your `references.cs` script didn't return a type of {typeof(List<ReferenceItem>).FullName}");
+                        ConsoleHelper.Instance.ErrorLine(result.ToString()!);
+                        break;
+                }
             },
             error =>
             {
@@ -69,7 +87,7 @@ public partial class ReferencesManager
 
                     if (options.DryRun)
                     {
-                        ConsoleHelper.Instance.DebugLine($"# git {argsClone}");
+                        ConsoleHelper.Instance.DryRunLine($"# git {argsClone}");
                     }
                     else
                     {
@@ -105,7 +123,7 @@ public partial class ReferencesManager
         return this;
     }
 
-    public ReferencesManager UpdateAll()
+    public ReferencesManager UpdateAll(ReferenceOptions options)
     {
         if (_references is null) return this;
 
@@ -122,11 +140,17 @@ public partial class ReferencesManager
 
                     if (dir is null) continue;
 
-                    PathHelper.Instance.ExecuteCommand(dir, "git", "pull", out var stdOutput, out var stdError, out var exitCode);
+                    if (options.DryRun)
+                    {
+                        ConsoleHelper.Instance.DryRunLine("# git pull");
+                    }
+                    else
+                    {
+                        PathHelper.Instance.ExecuteCommand(dir, "git", "pull", out var stdOutput, out var stdError, out var exitCode);
+                        ConsoleHelper.Instance.SetForeground(ConsoleColor.DarkGray).WriteLine(stdOutput ?? string.Empty).GoBack();
+                        if (exitCode != 0) ConsoleHelper.Instance.ErrorLine(stdError ?? string.Empty);
+                    }
 
-                    ConsoleHelper.Instance.SetForeground(ConsoleColor.DarkGray).WriteLine(stdOutput ?? string.Empty).GoBack();
-
-                    if (exitCode != 0) ConsoleHelper.Instance.ErrorLine(stdError ?? string.Empty);
                     break;
                 case ReferenceType.Binary:
                     break;
