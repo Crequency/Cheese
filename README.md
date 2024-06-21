@@ -33,7 +33,9 @@ dotnet tool install --global Crequency.Cheese
 
 ## Usage
 
-### Initialize
+### Initialize (In Design)
+
+Verb: `init`
 
 You can use `init` command from `Cheese` to clone a repo and setup it.
 
@@ -53,11 +55,39 @@ With `.cheese` folder exists, the init action will be execute automatically.
 
 ### Setup
 
+Verb: `setup`
+
+- `--reference` `[bool]`: include this argument to setup reference
+  - `cheese setup --reference` = `cheese reference --setup`
+
+### Reference
+
+Verb: `reference`, Alias: [ `refer`, `ref` ]
+
+- `--status` `[bool]`: use this to show references status
+- `--update` `[bool]`: use this to update references
+  - `--fetch` `[bool]`: include this to fetch remote
+- `--setup` `[bool]`: use this to setup references
+  - `--convert-ssl-link-to-https-link` `[bool]`: include this to clone with `https` styled link
+- `--gen` `[bool]`: use this to generate `references.json` file
+  - `--flavor` `[string]`: select a reference flavor to generate
+
+### Publish
+
+Verb: `publish`
+
+- `--skip-generate` `[bool]`: include this to skip generation
+- `--skip-packing` `[bool]`: include this to skip packing
+
+### i18n
+
+Verb: `i18n`
+
+- `--target` `[string]`: indicate the target
+
 ### ToDo Commands
 
 - commit
-- publish
-- i18n
 - doctor
 - test
 - docs
@@ -84,4 +114,16 @@ You can create this folder by `cheese init` command.
 
 # Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=Crequency/Cheese&type=Timeline)](https://star-history.com/#Crequency/Cheese&Timeline)
+[![Star History Chart](https://starchart.cc/Crequency/Cheese.svg?variant=adaptive)](https://starchart.cc/Crequency/Cheese)
+
+# Thanks to
+
+<p align="center">
+  <a href="https://www.jetbrains.com/" target="_blank" rel="noopener noreferrer">
+    <img width="128" src="https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.svg" alt="JetBrains Logo (Main) logo">
+  </a>
+</p>
+
+<p align="center">
+    Thanks to the great tools from <a href="https://www.jetbrains.com/" target="_blank">JetBrains</a>, we can turn our ideas into reality.
+</p>

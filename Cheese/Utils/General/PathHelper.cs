@@ -1,7 +1,8 @@
 ﻿using System.Diagnostics;
 using Common.BasicHelper.Utils.Extensions;
+using Spectre.Console;
 
-namespace Cheese.Utils.Cheese;
+namespace Cheese.Utils.General;
 
 public class PathHelper
 {
@@ -9,27 +10,35 @@ public class PathHelper
 
     public static PathHelper Instance => _instance ??= new();
 
-    private string? _baseSlnDir;
-
-    public string? BaseSlnDir => _baseSlnDir;
+    public string? BaseSlnDir { get; private set; }
 
     private bool FindSolutionUpward(string startLocation, string cheeseFolderName)
     {
-        var currentDirInfo = new DirectoryInfo(startLocation);
+        const int deepestDepth = 1000;
 
-        if (!currentDirInfo.Exists || currentDirInfo.Parent is null || CheckDirectory(currentDirInfo, cheeseFolderName))
+        var currentDepth = 0;
+
+        while (currentDepth <= deepestDepth)
         {
+            currentDepth += 1;
+
+            var currentDirInfo = new DirectoryInfo(startLocation);
+
+            if (currentDirInfo is { Exists: true, Parent: not null } && !CheckDirectory(currentDirInfo, cheeseFolderName))
+            {
+                startLocation = currentDirInfo.Parent.FullName;
+                continue;
+            }
+
             var path = Path.Combine(currentDirInfo.FullName, cheeseFolderName);
 
-            if (Directory.Exists(path))
-            {
-                _baseSlnDir = currentDirInfo.FullName;
-                return true;
-            }
-            else return false;
+            if (!Directory.Exists(path)) return false;
+
+            BaseSlnDir = currentDirInfo.FullName;
+            return true;
         }
 
-        return FindSolutionUpward(currentDirInfo.Parent.FullName, cheeseFolderName);
+        throw new IOException($"Meet max depth limit ({deepestDepth}) when looking upward for `{cheeseFolderName}` folder.");
     }
 
     private static bool CheckDirectory(DirectoryInfo directory, string fileNameIgnoreCase) => directory
@@ -37,6 +46,44 @@ public class PathHelper
         .Any(
             x => x.Name.Equals(fileNameIgnoreCase, StringComparison.OrdinalIgnoreCase)
         );
+
+    public Dictionary<string, FileInfo> GetSubFiles(DirectoryInfo dir)
+    {
+        var result = new Dictionary<string, FileInfo>();
+
+        SearchFiles(dir);
+
+        return result;
+
+        void SearchFiles(DirectoryInfo dirInfo)
+        {
+            foreach (var file in dirInfo.GetFiles())
+                result.Add(file.FullName, file);
+
+            foreach (var subDir in dirInfo.GetDirectories())
+                SearchFiles(subDir);
+        }
+    }
+
+    public Tree GetSubFilesTree(DirectoryInfo dir, string label)
+    {
+        var tree = new Tree(label);
+
+        SearchFiles(dir);
+
+        return tree;
+
+        void SearchFiles(DirectoryInfo dirInfo, TreeNode? parent = null)
+        {
+            var node = parent?.AddNode($"[yellow]\ud83d\udcc2 {dirInfo.Name}[/]") ?? tree.AddNode($"[yellow]\ud83d\udcc2 {dirInfo.Name}[/]");
+
+            foreach (var file in dirInfo.GetFiles())
+                node.AddNode($"[white]\ud83d\udcc4 {file.Name}[/]");
+
+            foreach (var subDir in dirInfo.GetDirectories())
+                SearchFiles(subDir, node);
+        }
+    }
 
     public static string? WorkBase => Path.GetDirectoryName(Process.GetCurrentProcess().MainModule?.FileName)?.GetFullPath();
 
@@ -46,12 +93,12 @@ public class PathHelper
 
         _ = FindSolutionUpward(location, ".cheese");
     }
-    
+
     public string? GetPath(string relativePath)
     {
         return BaseSlnDir is null ? null : Path.Combine(BaseSlnDir, relativePath);
     }
-    
+
     public PathHelper GetPath(string relativePath, out string? finalPath)
     {
         if (BaseSlnDir is null)
@@ -83,7 +130,7 @@ public class PathHelper
             return this;
         }
 
-        onReadIn?.Invoke(new FileInfo(path));
+        onReadIn?.Invoke(new(path));
 
         return this;
     }
@@ -119,7 +166,7 @@ public class PathHelper
         stdOutput = null;
         stdError = null;
         exitCode = -255;
-        
+
         if (BaseSlnDir is null) return this;
 
         var oldLocation = Path.GetFullPath(".");
@@ -143,7 +190,7 @@ public class PathHelper
         var process = Process.Start(startInfo);
 
         stdOutput = process?.StandardOutput.ReadToEnd();
-        
+
         stdError = process?.StandardError.ReadToEnd();
 
         process?.WaitForExit();
@@ -156,6 +203,16 @@ public class PathHelper
         }
 
         Environment.CurrentDirectory = oldLocation;
+
+        return this;
+    }
+
+    public PathHelper AssertInSlnDirectory(out bool assert)
+    {
+        assert = BaseSlnDir is not null;
+
+        if (BaseSlnDir is null)
+            throw new InvalidOperationException("We're not in a cheese project (make sure you have `.cheese` folder).");
 
         return this;
     }

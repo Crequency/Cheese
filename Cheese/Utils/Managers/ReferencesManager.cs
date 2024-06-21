@@ -1,13 +1,10 @@
-﻿using System.ComponentModel.Composition.Hosting;
-using System.Text;
-using System.Text.Json;
+﻿using System.Text;
 using System.Text.RegularExpressions;
-using Cheese.Contract.References;
 using Cheese.Options;
 using Cheese.Shared.References;
-using Cheese.Utils.Cheese;
+using Cheese.Utils.General;
 
-namespace Cheese.Utils.References;
+namespace Cheese.Utils.Managers;
 
 public partial class ReferencesManager
 {
@@ -17,20 +14,35 @@ public partial class ReferencesManager
 
     private List<ReferenceItem>? _references;
 
-    private const string ConfigPath = ".cheese/references.json";
-
-    private static readonly JsonSerializerOptions SerializerOptions = new() { WriteIndented = true };
+    private const string ProviderPath = ".cheese/references.cs";
 
     private ReferencesManager()
     {
         PathHelper.Instance.ReadFile(
-            ConfigPath,
+            ProviderPath,
             file =>
             {
-                var content = File.ReadAllText(file.FullName);
+                var script = File.ReadAllText(file.FullName);
 
-                _references = JsonSerializer.Deserialize<List<ReferenceItem>>(content) ??
-                              throw new FormatException("Bad format for `.cheese/references.json`.");
+                var task = ScriptHost.Instance.ExecuteCodesAsync(script, false);
+
+                task.Wait();
+
+                var result = task.Result;
+
+                switch (result)
+                {
+                    case null:
+                        ConsoleHelper.Instance.ErrorLine("Your `references.cs` script returned null");
+                        return;
+                    case List<ReferenceItem> items:
+                        _references = items;
+                        break;
+                    default:
+                        ConsoleHelper.Instance.ErrorLine($"Your `references.cs` script didn't return a type of {typeof(List<ReferenceItem>).FullName}");
+                        ConsoleHelper.Instance.ErrorLine(result.ToString()!);
+                        break;
+                }
             },
             error =>
             {
@@ -42,50 +54,6 @@ public partial class ReferencesManager
                 );
             }
         );
-    }
-
-    public ReferencesManager GenerateWithFlavor(ReferenceOptions options)
-    {
-        var path = PathHelper.WorkBase;
-
-        ArgumentNullException.ThrowIfNull(path, nameof(path));
-
-        if (options.Verbose)
-            ConsoleHelper.Instance
-                .DebugLine($"# Going to load plugins from `*.dll` with {nameof(IReferencesProvider)}")
-                .DebugLine($"# Plugins located in {path}")
-                .DebugLine("")
-                ;
-
-        var catalog = new DirectoryCatalog(path, "*.dll");
-
-        var container = new CompositionContainer(catalog);
-
-        var sub = container.GetExportedValues<IReferencesProvider>().ToList();
-
-        var target = sub.FirstOrDefault(
-            x => x.GetProviderIdentity().ToLower().Equals(options.Flavor?.ToLower())
-        );
-
-        ArgumentNullException.ThrowIfNull(target, nameof(target));
-
-        if (options.DryRun)
-        {
-            ConsoleHelper.Instance
-                .DebugLine($"# We found {sub.Count} plugins in {path} with `*.dll` pattern")
-                .DebugLine($"# Going to generate below content at {PathHelper.Instance.GetPath(ConfigPath)}")
-                .WriteLine("")
-                .DryRunLine(JsonSerializer.Serialize(target.GetReferences().ToList(), SerializerOptions))
-                ;
-
-            return this;
-        }
-
-        _references = target.GetReferences().ToList();
-
-        SaveAll();
-
-        return this;
     }
 
     public ReferencesManager SetupAll(ReferenceOptions options)
@@ -119,7 +87,7 @@ public partial class ReferencesManager
 
                     if (options.DryRun)
                     {
-                        ConsoleHelper.Instance.DebugLine($"# git {argsClone}");
+                        ConsoleHelper.Instance.DryRunLine($"# git {argsClone}");
                     }
                     else
                     {
@@ -155,7 +123,7 @@ public partial class ReferencesManager
         return this;
     }
 
-    public ReferencesManager UpdateAll()
+    public ReferencesManager UpdateAll(ReferenceOptions options)
     {
         if (_references is null) return this;
 
@@ -172,11 +140,17 @@ public partial class ReferencesManager
 
                     if (dir is null) continue;
 
-                    PathHelper.Instance.ExecuteCommand(dir, "git", "pull", out var stdOutput, out var stdError, out var exitCode);
+                    if (options.DryRun)
+                    {
+                        ConsoleHelper.Instance.DryRunLine("# git pull");
+                    }
+                    else
+                    {
+                        PathHelper.Instance.ExecuteCommand(dir, "git", "pull", out var stdOutput, out var stdError, out var exitCode);
+                        ConsoleHelper.Instance.SetForeground(ConsoleColor.DarkGray).WriteLine(stdOutput ?? string.Empty).GoBack();
+                        if (exitCode != 0) ConsoleHelper.Instance.ErrorLine(stdError ?? string.Empty);
+                    }
 
-                    ConsoleHelper.Instance.SetForeground(ConsoleColor.DarkGray).WriteLine(stdOutput ?? string.Empty).GoBack();
-
-                    if (exitCode != 0) ConsoleHelper.Instance.ErrorLine(stdError ?? string.Empty);
                     break;
                 case ReferenceType.Binary:
                     break;
@@ -239,26 +213,6 @@ public partial class ReferencesManager
         }
 
         ConsoleHelper.Instance.WriteLine("").WriteLine(finalResult.ToString());
-
-        return this;
-    }
-
-    public ReferencesManager SaveAll()
-    {
-        PathHelper.Instance.WriteFile(
-            ConfigPath,
-            JsonSerializer.Serialize(_references, SerializerOptions),
-            error =>
-            {
-                Console.WriteLine(
-                    new StringBuilder()
-                        .AppendLine($"Error occured: {error.Message}")
-                        .AppendLine(error.StackTrace)
-                        .ToString()
-                );
-            },
-            () => Console.WriteLine($"References saved at `{ConfigPath}`")
-        );
 
         return this;
     }
