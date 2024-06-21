@@ -75,10 +75,10 @@ public class PathHelper
 
         void SearchFiles(DirectoryInfo dirInfo, TreeNode? parent = null)
         {
-            var node = parent?.AddNode($"[yellow]+ {dirInfo.Name}[/]") ?? tree.AddNode($"[yellow]+ {dirInfo.Name}[/]");
+            var node = parent?.AddNode($"[yellow]\ud83d\udcc2 {dirInfo.Name}[/]") ?? tree.AddNode($"[yellow]\ud83d\udcc2 {dirInfo.Name}[/]");
 
             foreach (var file in dirInfo.GetFiles())
-                node.AddNode($"[white]{file.Name}[/]");
+                node.AddNode($"[white]\ud83d\udcc4 {file.Name}[/]");
 
             foreach (var subDir in dirInfo.GetDirectories())
                 SearchFiles(subDir, node);
