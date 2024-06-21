@@ -85,6 +85,8 @@ public class ScriptsManager
             return this;
         }
 
+        if (options.DryRun) return this;
+
         var script = File.ReadAllText(finalFileToExecute!);
 
         ConsoleHelper.Instance.AccentLine("Executing ...");
