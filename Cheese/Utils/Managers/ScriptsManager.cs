@@ -37,7 +37,7 @@ public class ScriptsManager
         {
             var lcs = GetLcs(file.Name, options.Execute ?? "");
 
-            if (lcs < visitedMaxLcsLen) continue;
+            if (lcs < visitedMaxLcsLen || lcs == 0) continue;
 
             if (lcs == visitedMaxLcsLen)
             {
@@ -90,7 +90,7 @@ public class ScriptsManager
         ConsoleHelper.Instance.AccentLine("Executing ...");
 
         var task = ScriptHost.Instance.ExecuteCodesAsync(script, false);
-        
+
         task.Wait();
 
         return this;
@@ -103,19 +103,19 @@ public class ScriptsManager
             var w = Math.Max(a.Length, b.Length);
             var h = Math.Min(a.Length, b.Length);
 
-            var sa = a.Length > b.Length ? a : b;
-            var sb = a.Length > b.Length ? b : a;
+            var sa = a.Length >= b.Length ? a : b;
+            var sb = a.Length >= b.Length ? b : a;
 
             var mat = new int[w + 1, w + 1];
 
-            for (var i = 0; i <= w; ++i)
+            for (var i = 0; i <= h; ++i)
             for (var j = 0; j <= w; ++j)
                 mat[i, j] = 0;
 
-            for (var i = 1; i <= w; ++i)
-            for (var j = 1; j <= h; ++j)
+            for (var i = 1; i <= h; ++i)
+            for (var j = 1; j <= w; ++j)
             {
-                var isSame = sa[i - 1] == sb[j - 1];
+                var isSame = sa[j - 1] == sb[i - 1];
                 mat[i, j] = isSame ? mat[i - 1, j - 1] + 1 : Math.Max(mat[i, j - 1], mat[i - 1, j]);
             }
 
