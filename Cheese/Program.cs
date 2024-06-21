@@ -9,10 +9,12 @@ var version = assembly.GetName().Version;
 
 var versionText = $"v{version?.Major}.{version?.Minor}.{version?.Build} ({version?.MinorRevision})";
 
-Parser.Default.ParseArguments<Options, SetupOptions, ReferenceOptions, object>(args)
+Parser.Default.ParseArguments<Options, SetupOptions, ScriptsOptions, ReferenceOptions, object>(args)
     .WithParsed<Options>(options => options.Execute())
     // Parse command "setup"
     .WithParsed<SetupOptions>(options => options.Execute())
+    // Parse command "scripts"
+    .WithParsed<ScriptsOptions>(options => options.Execute())
     // Parse command "reference"
     .WithParsed<ReferenceOptions>(options => options.Execute())
     ;

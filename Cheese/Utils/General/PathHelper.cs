@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using Common.BasicHelper.Utils.Extensions;
+using Spectre.Console;
 
 namespace Cheese.Utils.General;
 
@@ -50,7 +51,38 @@ public class PathHelper
     {
         var result = new Dictionary<string, FileInfo>();
 
+        SearchFiles(dir);
+
         return result;
+
+        void SearchFiles(DirectoryInfo dirInfo)
+        {
+            foreach (var file in dirInfo.GetFiles())
+                result.Add(file.FullName, file);
+
+            foreach (var subDir in dirInfo.GetDirectories())
+                SearchFiles(subDir);
+        }
+    }
+
+    public Tree GetSubFilesTree(DirectoryInfo dir, string label)
+    {
+        var tree = new Tree(label);
+
+        SearchFiles(dir);
+
+        return tree;
+
+        void SearchFiles(DirectoryInfo dirInfo, TreeNode? parent = null)
+        {
+            var node = parent?.AddNode($"[yellow]+ {dirInfo.Name}[/]") ?? tree.AddNode($"[yellow]+ {dirInfo.Name}[/]");
+
+            foreach (var file in dirInfo.GetFiles())
+                node.AddNode($"[white]{file.Name}[/]");
+
+            foreach (var subDir in dirInfo.GetDirectories())
+                SearchFiles(subDir, node);
+        }
     }
 
     public static string? WorkBase => Path.GetDirectoryName(Process.GetCurrentProcess().MainModule?.FileName)?.GetFullPath();
