@@ -72,7 +72,11 @@ public class ScriptsManager
                 break;
             default:
                 ConsoleHelper.Instance.ErrorLine("We found no matched files.");
-                break;
+
+                if (!options.FailFast) return this;
+
+                Environment.ExitCode = 30;
+                throw new IOException("No matched files found");
         }
 
         if (finalFileToExecute.IsNullOrWhiteSpace())
