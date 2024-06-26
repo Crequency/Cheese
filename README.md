@@ -16,7 +16,7 @@
 </p>
 
 <p align="center">
-  <img src="https://profile-counter.glitch.me/Crequency-Cheese/count.svg">
+  <img src="https://profile-counter.glitch.me/Crequency-Cheese/count.svg" alt="count">
 </p>
 
 # About
@@ -28,7 +28,13 @@ A new generation of project scaffolding tool to make your development process mo
 Install `Cheese` by dotnet tool:
 
 ```shell
-dotnet tool install --global Crequency.Cheese
+dotnet tool install cheese --global 
+```
+
+Update `Cheese` by dotnet tool:
+
+```shell
+dotnet tool update cheese -g
 ```
 
 ## Usage
@@ -44,12 +50,12 @@ For example:
 ```shell
 cheese init Crequency/KitX.github
 # We use protocol suffix including "github", "gitlab", "gitee"
-# The default protocol is github, so you can execute: `cheese setup Crequency/KitX`
+# The default protocol is github, so you can execute: `cheese init Crequency/KitX`
 ```
 
-This command will clone `Crequency/KitX` repo from github, and check if there is `.cheese` folder.
+This command will clone `Crequency/KitX` repo from GitHub, and check if there is `.cheese` folder.
 
-With `.cheese` folder exists, the init action will be execute automatically.
+With `.cheese` folder exists, the init action will be executed automatically.
 
 > In any folder, execute pure `cheese init` will only create `.cheese` folder.
 
@@ -57,7 +63,7 @@ With `.cheese` folder exists, the init action will be execute automatically.
 
 Verb: `setup`
 
-- `--reference` `[bool]`: include this argument to setup reference
+- `--reference` `[bool]`: include this argument to set up reference
   - `cheese setup --reference` = `cheese reference --setup`
 
 ### Reference
@@ -67,23 +73,10 @@ Verb: `reference`, Alias: [ `refer`, `ref` ]
 - `--status` `[bool]`: use this to show references status
 - `--update` `[bool]`: use this to update references
   - `--fetch` `[bool]`: include this to fetch remote
-- `--setup` `[bool]`: use this to setup references
+- `--setup` `[bool]`: use this to set up references
   - `--convert-ssl-link-to-https-link` `[bool]`: include this to clone with `https` styled link
-- `--gen` `[bool]`: use this to generate `references.json` file
-  - `--flavor` `[string]`: select a reference flavor to generate
 
-### Publish
-
-Verb: `publish`
-
-- `--skip-generate` `[bool]`: include this to skip generation
-- `--skip-packing` `[bool]`: include this to skip packing
-
-### i18n
-
-Verb: `i18n`
-
-- `--target` `[string]`: indicate the target
+Cheese will run `.cheese/references.cs` to get references list.
 
 ### ToDo Commands
 
@@ -100,6 +93,8 @@ Your repo should have a `.cheese` folder in the root directory like:
 ```text
 + project
   + .cheese
+    + scripts
+    \ references.cs
   + src
   + docs
     README.md
