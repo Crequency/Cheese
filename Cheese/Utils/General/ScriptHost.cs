@@ -3,7 +3,6 @@ using System.Reflection;
 using System.Text;
 using Common.BasicHelper.Core.Shell;
 using Csharpell.Core;
-using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Scripting;
 using Microsoft.CodeAnalysis.Scripting;
@@ -41,8 +40,7 @@ public class ScriptHost
                     options = options
                             // This line and below references importer are to make sure namespaces are all imported
                             .WithReferences(Assembly.GetExecutingAssembly()) // This lian and next one are about Cheese assembly
-                            .WithReferences(Assembly.GetAssembly(typeof(ScriptHost))) 
-                            .WithReferences(Assembly.GetAssembly(typeof(EnvironmentHelper))) // For `Common.BasicHelper` assembly
+                            .WithReferences(Assembly.GetAssembly(typeof(ScriptHost)))
                             .WithImports(
                                 "Cheese",
                                 "Cheese.Utils",

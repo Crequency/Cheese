@@ -91,9 +91,14 @@ public class ScriptsManager
 
         ConsoleHelper.Instance.AccentLine("Executing ...");
 
-        var task = ScriptHost.Instance.ExecuteCodesAsync(script, false);
+        var failed = false;
+
+        var task = ScriptHost.Instance.ExecuteCodesAsync(script, onError: _ => failed = true, includeTimestamp: false);
 
         task.Wait();
+
+        if (failed && options.FailFast)
+            ConsoleHelper.Instance.ErrorLine(task.Result!.ToString()!);
 
         return this;
 
