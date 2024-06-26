@@ -1,9 +1,12 @@
 using System.Diagnostics;
 using System.Reflection;
 using System.Text;
+using Common.BasicHelper.Core.Shell;
 using Csharpell.Core;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Scripting;
+using Microsoft.CodeAnalysis.Scripting;
 
 namespace Cheese.Utils.General;
 
@@ -19,7 +22,8 @@ public class ScriptHost
         string code,
         bool includeTimestamp = true,
         CancellationToken cancellationToken = default,
-        Action<Exception>? onError = null
+        Action<Exception>? onError = null,
+        Func<ScriptOptions, ScriptOptions>? optionsProcessor = null
     )
     {
         var sw = new Stopwatch();
@@ -35,9 +39,10 @@ public class ScriptHost
                 options =>
                 {
                     options = options
-                            .WithReferences(Assembly.GetExecutingAssembly())
-                            // This line is to make sure namespaces are all imported
-                            .WithReferences(Assembly.GetAssembly(typeof(ScriptHost)))
+                            // This line and below references importer are to make sure namespaces are all imported
+                            .WithReferences(Assembly.GetExecutingAssembly()) // This lian and next one are about Cheese assembly
+                            .WithReferences(Assembly.GetAssembly(typeof(ScriptHost))) 
+                            .WithReferences(Assembly.GetAssembly(typeof(EnvironmentHelper))) // For `Common.BasicHelper` assembly
                             .WithImports(
                                 "Cheese",
                                 "Cheese.Utils",
@@ -49,6 +54,8 @@ public class ScriptHost
                             )
                             .WithLanguageVersion(LanguageVersion.Preview)
                         ;
+
+                    options = optionsProcessor?.Invoke(options) ?? options;
 
                     return options;
                 },
