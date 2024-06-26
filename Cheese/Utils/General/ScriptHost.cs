@@ -1,7 +1,7 @@
 using System.Diagnostics;
 using System.Reflection;
 using System.Text;
-using Common.BasicHelper.Core.Shell;
+using System.Text.Json;
 using Csharpell.Core;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Scripting;
@@ -38,8 +38,9 @@ public class ScriptHost
                 options =>
                 {
                     options = options
+                            .WithReferences(Assembly.GetAssembly(typeof(JsonSerializer)))
                             // This line and below references importer are to make sure namespaces are all imported
-                            .WithReferences(Assembly.GetExecutingAssembly()) // This lian and next one are about Cheese assembly
+                            .WithReferences(Assembly.GetExecutingAssembly()) // This line and next one are about Cheese assembly
                             .WithReferences(Assembly.GetAssembly(typeof(ScriptHost)))
                             .WithImports(
                                 "Cheese",
