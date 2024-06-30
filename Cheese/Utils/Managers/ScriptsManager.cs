@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using Cheese.Options;
 using Cheese.Utils.General;
 using Common.BasicHelper.Utils.Extensions;
@@ -106,6 +107,9 @@ public class ScriptsManager
         {
             if (a.IsNullOrWhiteSpace() || b.IsNullOrWhiteSpace())
                 return 0;
+
+            a = Regex.Escape(a);
+            b = Regex.Escape(b);
 
             var w = Math.Max(a.Length, b.Length);
             var h = Math.Min(a.Length, b.Length);
