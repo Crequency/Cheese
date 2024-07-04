@@ -1,6 +1,8 @@
+using System.Diagnostics;
 using System.Text.RegularExpressions;
 using Cheese.Options;
 using Cheese.Utils.General;
+using Common.BasicHelper.Core.Shell;
 using Common.BasicHelper.Utils.Extensions;
 using Spectre.Console;
 
@@ -90,7 +92,19 @@ public class ScriptsManager
 
         var script = File.ReadAllText(finalFileToExecute!);
 
-        ConsoleHelper.Instance.AccentLine("Executing ...");
+        ConsoleHelper.Instance.AccentLine($"Executing ...{(options.InAloneProcess ? " (Alone)" : "")}");
+
+        if (options.InAloneProcess)
+        {
+            var process = Process.Start(new ProcessStartInfo(EnvironmentHelper.GetFilePathInPaths("cheese"), $"scripts -e {options.Execute}")
+            {
+                CreateNoWindow = true,
+                UseShellExecute = false
+            });
+            ArgumentNullException.ThrowIfNull(process, nameof(process));
+            ConsoleHelper.Instance.AccentLine($"Alone process owns pid: {process.Id}");
+            return this;
+        }
 
         var failed = false;
 
