@@ -51,7 +51,7 @@ public class ScriptsManager
             mostMatchedFiles.Add(file);
         }
 
-        var finalFileToExecute = string.Empty;
+        string? finalFileToExecute;
 
         switch (mostMatchedFiles.Count)
         {
