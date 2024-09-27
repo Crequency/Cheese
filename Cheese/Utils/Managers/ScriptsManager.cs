@@ -50,6 +50,7 @@ public class ScriptsManager
             mostMatchedFiles.Add(file);
         }
 
+        // ReSharper disable once RedundantAssignment
         var finalFileToExecute = string.Empty;
 
         switch (mostMatchedFiles.Count)
@@ -94,9 +95,21 @@ public class ScriptsManager
 
         ConsoleHelper.Instance.AccentLine("Executing ...");
 
-        var task = ScriptHost.Instance.ExecuteCodesAsync(script, false);
+        var failed = false;
+
+        var task = ScriptHost.Instance.ExecuteCodesAsync(
+            script,
+            false,
+            onError: _ => failed = true
+        );
 
         task.Wait();
+
+        if (failed)
+        {
+            Console.WriteLine();
+            ConsoleHelper.Instance.ErrorLine(task.Result as string ?? "");
+        }
 
         return this;
 

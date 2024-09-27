@@ -16,7 +16,7 @@ public static class SetupOptionsExtensions
     {
         if (options.SetupReference)
             ReferencesManager.Instance.SetupAll(new());
-        
+
         return options;
     }
 }

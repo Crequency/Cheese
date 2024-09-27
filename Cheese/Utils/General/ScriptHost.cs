@@ -35,9 +35,11 @@ public class ScriptHost
                 options =>
                 {
                     options = options
-                            .WithReferences(Assembly.GetExecutingAssembly())
                             // This line is to make sure namespaces are all imported
-                            .WithReferences(Assembly.GetAssembly(typeof(ScriptHost)))
+                            .WithReferences(
+                                Assembly.GetExecutingAssembly(),
+                                Assembly.Load("System.Text.Json")
+                            )
                             .WithImports(
                                 "Cheese",
                                 "Cheese.Utils",
