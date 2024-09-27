@@ -39,7 +39,9 @@ public partial class ReferencesManager
                         _references = items;
                         break;
                     default:
-                        ConsoleHelper.Instance.ErrorLine($"Your `references.cs` script didn't return a type of {typeof(List<ReferenceItem>).FullName}");
+                        ConsoleHelper.Instance.ErrorLine(
+                            $"Your `references.cs` script didn't return a type of {typeof(List<ReferenceItem>).FullName}"
+                        );
                         ConsoleHelper.Instance.ErrorLine(result.ToString()!);
                         break;
                 }
@@ -91,8 +93,19 @@ public partial class ReferencesManager
                     }
                     else
                     {
-                        PathHelper.Instance.ExecuteCommand("", "git", argsClone, out var stdOutput, out var stdError, out var exitCode);
-                        ConsoleHelper.Instance.SetForeground(ConsoleColor.DarkGray).WriteLine(stdOutput ?? string.Empty).GoBack();
+                        PathHelper.Instance.ExecuteCommand(
+                            "",
+                            "git",
+                            argsClone,
+                            out var stdOutput,
+                            out var stdError,
+                            out var exitCode
+                        );
+                        ConsoleHelper.Instance
+                            .SetForeground(ConsoleColor.DarkGray)
+                            .WriteLine(stdOutput ?? string.Empty)
+                            .GoBack()
+                            ;
 
                         if (exitCode != 0)
                         {
@@ -108,8 +121,19 @@ public partial class ReferencesManager
                     }
                     else
                     {
-                        PathHelper.Instance.ExecuteCommand(dir, "git", argsCheckout, out var cStdOutput, out var cStdError, out var cExitCode);
-                        ConsoleHelper.Instance.SetForeground(ConsoleColor.DarkGray).WriteLine(cStdOutput ?? string.Empty).GoBack();
+                        PathHelper.Instance.ExecuteCommand(
+                            dir,
+                            "git",
+                            argsCheckout,
+                            out var cStdOutput,
+                            out var cStdError,
+                            out var cExitCode
+                        );
+                        ConsoleHelper.Instance
+                            .SetForeground(ConsoleColor.DarkGray)
+                            .WriteLine(cStdOutput ?? string.Empty)
+                            .GoBack()
+                            ;
 
                         if (cExitCode != 0) ConsoleHelper.Instance.ErrorLine(cStdError ?? string.Empty);
                     }
@@ -146,8 +170,19 @@ public partial class ReferencesManager
                     }
                     else
                     {
-                        PathHelper.Instance.ExecuteCommand(dir, "git", "pull", out var stdOutput, out var stdError, out var exitCode);
-                        ConsoleHelper.Instance.SetForeground(ConsoleColor.DarkGray).WriteLine(stdOutput ?? string.Empty).GoBack();
+                        PathHelper.Instance.ExecuteCommand(
+                            dir,
+                            "git",
+                            "pull",
+                            out var stdOutput,
+                            out var stdError,
+                            out var exitCode
+                        );
+                        ConsoleHelper.Instance
+                            .SetForeground(ConsoleColor.DarkGray)
+                            .WriteLine(stdOutput ?? string.Empty)
+                            .GoBack()
+                            ;
                         if (exitCode != 0) ConsoleHelper.Instance.ErrorLine(stdError ?? string.Empty);
                     }
 
@@ -188,17 +223,36 @@ public partial class ReferencesManager
 
                     if (options.Fetch)
                     {
-                        PathHelper.Instance.ExecuteCommand(dir, "git", "fetch", out _, out var fStdError, out var fExitCode, showText: options.Verbose);
+                        PathHelper.Instance.ExecuteCommand(
+                            dir,
+                            "git",
+                            "fetch",
+                            out _,
+                            out var fStdError,
+                            out var fExitCode,
+                            showText: options.Verbose
+                        );
 
                         if (fExitCode != 0)
                             ConsoleHelper.Instance
                                 .ErrorLine($"@ Failed to fetch remote repo with exit code {fExitCode}")
                                 .WriteLine("")
-                                .ErrorLine(fStdError ?? string.Empty);
+                                .ErrorLine(fStdError ?? string.Empty)
+                                ;
                     }
 
-                    GitHelper.Instance.GetLatestCommitHash(dir, item.Branch, out var latestCommitHash, showText: options.Verbose);
-                    GitHelper.Instance.GetLatestCommitHash(dir, item.RemoteBranch, out var remoteCommitHash, showText: options.Verbose);
+                    GitHelper.Instance.GetLatestCommitHash(
+                        dir,
+                        item.Branch,
+                        out var latestCommitHash,
+                        showText: options.Verbose
+                    );
+                    GitHelper.Instance.GetLatestCommitHash(
+                        dir,
+                        item.RemoteBranch,
+                        out var remoteCommitHash,
+                        showText: options.Verbose
+                    );
 
                     var remoteText = remoteCommitHash ?? "none";
 

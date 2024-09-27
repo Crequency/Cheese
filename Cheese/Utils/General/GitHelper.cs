@@ -14,10 +14,18 @@ public class GitHelper
 
             return this;
         }
-        
+
         var args = $"rev-parse {branch}";
 
-        PathHelper.Instance.ExecuteCommand(location, "git", args, out var stdOut, out var stdError, out var exitCode, showText);
+        PathHelper.Instance.ExecuteCommand(
+            location,
+            "git",
+            args,
+            out var stdOut,
+            out var stdError,
+            out var exitCode,
+            showText
+        );
 
         if (exitCode != 0)
         {
@@ -26,10 +34,11 @@ public class GitHelper
             ConsoleHelper.Instance
                 .ErrorLine($"@ Failed to fetch latest commit hash with exit code {exitCode}")
                 .WriteLine("")
-                .ErrorLine(stdError ?? string.Empty);
+                .ErrorLine(stdError ?? string.Empty)
+                ;
         }
         else result = stdOut?.Replace("\r", "").Replace("\n", "");
-        
+
         return this;
     }
 }

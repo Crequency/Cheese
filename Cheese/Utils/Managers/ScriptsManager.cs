@@ -61,7 +61,10 @@ public class ScriptsManager
                     tree.AddNode($"[white]\ud83d\udcc4 {file.Name}[/]");
                 AnsiConsole.Write(tree);
 
-                var userChoice = AnsiConsole.Ask("Which one you want to execute (type exact file name) ?", mostMatchedFiles.First().Name);
+                var userChoice = AnsiConsole.Ask(
+                    "Which one you want to execute (type exact file name) ?",
+                    mostMatchedFiles.First().Name
+                );
                 finalFileToExecute = mostMatchedFiles.FirstOrDefault(file => file.Name.Equals(userChoice))?.FullName;
 
                 break;
