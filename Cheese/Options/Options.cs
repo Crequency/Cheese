@@ -10,7 +10,7 @@ public class Options
 
     [Option("dry-run", HelpText = "Display what the command will do instead of executing directly.")]
     public bool DryRun { get; set; }
-    
+
     [Option("fail-fast", Default = false, HelpText = "When any operation failed, exit and return non-zero")]
     public bool FailFast { get; set; }
 }

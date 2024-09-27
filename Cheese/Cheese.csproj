@@ -34,15 +34,21 @@
         <None Include="..\README.md" Pack="True" PackagePath="\" />
         <None Include="icon.png" Pack="True" PackagePath="\" />
     </ItemGroup>
-    
+
     <ItemGroup>
         <PackageReference Include="CommandLineParser" Version="2.9.1" />
         <PackageReference Include="Csharpell.Core" Version="0.5.335.689" />
         <PackageReference Include="Spectre.Console" Version="0.49.1" />
     </ItemGroup>
-    
+
     <ItemGroup>
-      <ProjectReference Include="..\Cheese.Shared\Cheese.Shared.csproj" />
+        <ProjectReference Include="..\Cheese.Shared\Cheese.Shared.csproj" />
+    </ItemGroup>
+
+
+    <ItemGroup>
+        <!-- Make sure the final Assemblies contains `System.Text.Json` -->
+        <TrimmerRootAssembly Include="System.Text.Json" />
     </ItemGroup>
 
 </Project>

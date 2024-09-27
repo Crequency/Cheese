@@ -75,7 +75,9 @@ public class PathHelper
 
         void SearchFiles(DirectoryInfo dirInfo, TreeNode? parent = null)
         {
-            var node = parent?.AddNode($"[yellow]\ud83d\udcc2 {dirInfo.Name}[/]") ?? tree.AddNode($"[yellow]\ud83d\udcc2 {dirInfo.Name}[/]");
+            var node = parent?.AddNode(
+                $"[yellow]\ud83d\udcc2 {dirInfo.Name}[/]") ?? tree.AddNode($"[yellow]\ud83d\udcc2 {dirInfo.Name}[/]"
+            );
 
             foreach (var file in dirInfo.GetFiles())
                 node.AddNode($"[white]\ud83d\udcc4 {file.Name}[/]");
@@ -135,8 +137,7 @@ public class PathHelper
         return this;
     }
 
-    public PathHelper WriteFile(string relativePath, string content, Action<Exception>? onError = null,
-        Action? onSucceeded = null)
+    public PathHelper WriteFile(string relativePath, string content, Action<Exception>? onError = null, Action? onSucceeded = null)
     {
         if (BaseSlnDir is null)
         {
@@ -161,7 +162,15 @@ public class PathHelper
         return this;
     }
 
-    public PathHelper ExecuteCommand(string relativeBaseDir, string cmd, string args, out string? stdOutput, out string? stdError, out int exitCode, bool showText = true)
+    public PathHelper ExecuteCommand(
+        string relativeBaseDir,
+        string cmd,
+        string args,
+        out string? stdOutput,
+        out string? stdError,
+        out int exitCode,
+        bool showText = true
+    )
     {
         stdOutput = null;
         stdError = null;

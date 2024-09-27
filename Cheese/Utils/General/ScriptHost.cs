@@ -35,9 +35,11 @@ public class ScriptHost
                 options =>
                 {
                     options = options
-                            .WithReferences(Assembly.GetExecutingAssembly())
                             // This line is to make sure namespaces are all imported
-                            .WithReferences(Assembly.GetAssembly(typeof(ScriptHost)))
+                            .WithReferences(
+                                Assembly.GetExecutingAssembly(),
+                                Assembly.Load("System.Text.Json")
+                            )
                             .WithImports(
                                 "Cheese",
                                 "Cheese.Utils",
@@ -62,7 +64,9 @@ public class ScriptHost
             return includeTimestamp
                     ? new StringBuilder()
                         .AppendLine($"[{begin:yyyy-MM-dd HH:mm:ss}] [I] Posted.")
-                        .AppendLine($"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] [I] Ended, took {sw.ElapsedMilliseconds} ms.")
+                        .AppendLine(
+                            $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] [I] Ended, took {sw.ElapsedMilliseconds} ms."
+                        )
                         .AppendLine(result?.ToString())
                         .ToString()
                     : result
@@ -76,12 +80,11 @@ public class ScriptHost
 
             return new StringBuilder()
                 .AppendLine($"[{begin:yyyy-MM-dd HH:mm:ss}] [I] Posted.")
-                .AppendLine($"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] [E] Exception caught after {sw.ElapsedMilliseconds} ms, Message: {e.Message}")
+                .AppendLine(
+                    $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] [E] Exception caught after {sw.ElapsedMilliseconds} ms, Message: {e.Message}"
+                )
                 .AppendLine(e.StackTrace)
                 .ToString();
-            ;
         }
-
-        ;
     }
 }

@@ -43,7 +43,7 @@ public class ConsoleHelper
         SetForeground(ConsoleColor.DarkGray)
             .Write(content)
             .GoBack();
-        
+
         return this;
     }
 
@@ -52,7 +52,7 @@ public class ConsoleHelper
         SetForeground(ConsoleColor.DarkGray)
             .WriteLine(content)
             .GoBack();
-        
+
         return this;
     }
 
@@ -61,7 +61,7 @@ public class ConsoleHelper
         SetForeground(ConsoleColor.Red)
             .Write(content)
             .GoBack();
-        
+
         return this;
     }
 
@@ -70,7 +70,7 @@ public class ConsoleHelper
         SetForeground(ConsoleColor.Red)
             .WriteLine(content)
             .GoBack();
-        
+
         return this;
     }
 
@@ -79,34 +79,34 @@ public class ConsoleHelper
         SetForeground(ConsoleColor.Cyan)
             .Write(content)
             .GoBack();
-        
+
         return this;
     }
-    
+
     public ConsoleHelper AccentLine(string content)
     {
         SetForeground(ConsoleColor.Cyan)
             .WriteLine(content)
             .GoBack();
-        
+
         return this;
     }
-    
+
     public ConsoleHelper DryRun(string content)
     {
         SetForeground(ConsoleColor.DarkGray)
             .Write(content)
             .GoBack();
-        
+
         return this;
     }
-    
+
     public ConsoleHelper DryRunLine(string content)
     {
         SetForeground(ConsoleColor.DarkGray)
             .WriteLine(content)
             .GoBack();
-        
+
         return this;
     }
 }

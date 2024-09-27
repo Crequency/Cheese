@@ -28,7 +28,7 @@ A new generation of project scaffolding tool to make your development process mo
 Install `Cheese` by dotnet tool:
 
 ```shell
-dotnet tool install --global Crequency.Cheese
+dotnet tool install --global Cheese
 ```
 
 ## Usage
