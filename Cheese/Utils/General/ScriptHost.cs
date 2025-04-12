@@ -1,9 +1,11 @@
 using System.Diagnostics;
 using System.Reflection;
 using System.Text;
+using System.Text.Json;
 using Csharpell.Core;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Scripting;
+using Microsoft.CodeAnalysis.Scripting;
 
 namespace Cheese.Utils.General;
 
@@ -19,7 +21,8 @@ public class ScriptHost
         string code,
         bool includeTimestamp = true,
         CancellationToken cancellationToken = default,
-        Action<Exception>? onError = null
+        Action<Exception>? onError = null,
+        Func<ScriptOptions, ScriptOptions>? optionsProcessor = null
     )
     {
         var sw = new Stopwatch();
@@ -35,22 +38,23 @@ public class ScriptHost
                 options =>
                 {
                     options = options
-                            // This line is to make sure namespaces are all imported
-                            .WithReferences(
-                                Assembly.GetExecutingAssembly(),
-                                Assembly.Load("System.Text.Json")
-                            )
-                            .WithImports(
-                                "Cheese",
-                                "Cheese.Utils",
-                                "Cheese.Utils.General",
-                                "Cheese.Utils.Managers",
-                                "Cheese.Shared",
-                                "Cheese.Shared.PipeLine",
-                                "Cheese.Shared.References"
-                            )
-                            .WithLanguageVersion(LanguageVersion.Preview)
-                        ;
+                        // This line is to make sure namespaces are all imported
+                        .WithReferences(
+                            Assembly.GetExecutingAssembly(),
+                            Assembly.Load("System.Text.Json")
+                        )
+                        .WithImports(
+                            "Cheese",
+                            "Cheese.Utils",
+                            "Cheese.Utils.General",
+                            "Cheese.Utils.Managers",
+                            "Cheese.Shared",
+                            "Cheese.Shared.PipeLine",
+                            "Cheese.Shared.References"
+                        )
+                        .WithLanguageVersion(LanguageVersion.Preview);
+
+                    options = optionsProcessor?.Invoke(options) ?? options;
 
                     return options;
                 },
@@ -62,15 +66,14 @@ public class ScriptHost
             sw.Stop();
 
             return includeTimestamp
-                    ? new StringBuilder()
-                        .AppendLine($"[{begin:yyyy-MM-dd HH:mm:ss}] [I] Posted.")
-                        .AppendLine(
-                            $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] [I] Ended, took {sw.ElapsedMilliseconds} ms."
-                        )
-                        .AppendLine(result?.ToString())
-                        .ToString()
-                    : result
-                ;
+                ? new StringBuilder()
+                    .AppendLine($"[{begin:yyyy-MM-dd HH:mm:ss}] [I] Posted.")
+                    .AppendLine(
+                        $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] [I] Ended, took {sw.ElapsedMilliseconds} ms."
+                    )
+                    .AppendLine(result?.ToString())
+                    .ToString()
+                : result;
         }
         catch (Exception e)
         {

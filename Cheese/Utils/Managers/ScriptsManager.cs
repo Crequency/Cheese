@@ -1,5 +1,8 @@
+using System.Diagnostics;
+using System.Text.RegularExpressions;
 using Cheese.Options;
 using Cheese.Utils.General;
+using Common.BasicHelper.Core.Shell;
 using Common.BasicHelper.Utils.Extensions;
 using Spectre.Console;
 
@@ -37,7 +40,8 @@ public class ScriptsManager
         {
             var lcs = GetLcs(file.Name, options.Execute ?? "");
 
-            if (lcs < visitedMaxLcsLen || lcs == 0) continue;
+            if (lcs < visitedMaxLcsLen || lcs == 0)
+                continue;
 
             if (lcs == visitedMaxLcsLen)
             {
@@ -66,18 +70,23 @@ public class ScriptsManager
                     "Which one you want to execute (type exact file name) ?",
                     mostMatchedFiles.First().Name
                 );
-                finalFileToExecute = mostMatchedFiles.FirstOrDefault(file => file.Name.Equals(userChoice))?.FullName;
+                finalFileToExecute = mostMatchedFiles
+                    .FirstOrDefault(file => file.Name.Equals(userChoice))
+                    ?.FullName;
 
                 break;
             }
             case 1:
-                AnsiConsole.MarkupLine($"The most matched file is [green]{mostMatchedFiles.First().Name}[/].");
+                AnsiConsole.MarkupLine(
+                    $"The most matched file is [green]{mostMatchedFiles.First().Name}[/]."
+                );
                 finalFileToExecute = mostMatchedFiles.First().FullName;
                 break;
             default:
                 ConsoleHelper.Instance.ErrorLine("We found no matched files.");
 
-                if (!options.FailFast) return this;
+                if (!options.FailFast)
+                    return this;
 
                 Environment.ExitCode = 30;
                 throw new IOException("No matched files found");
@@ -89,18 +98,38 @@ public class ScriptsManager
             return this;
         }
 
-        if (options.DryRun) return this;
+        if (options.DryRun)
+            return this;
 
         var script = File.ReadAllText(finalFileToExecute!);
 
-        ConsoleHelper.Instance.AccentLine("Executing ...");
+        ConsoleHelper.Instance.AccentLine(
+            $"Executing ...{(options.InAloneProcess ? " (Alone)" : "")}"
+        );
+
+        if (options.InAloneProcess)
+        {
+            var process = Process.Start(
+                new ProcessStartInfo(
+                    EnvironmentHelper.GetFilePathInPaths("cheese"),
+                    $"scripts -e {options.Execute}"
+                )
+                {
+                    CreateNoWindow = true,
+                    UseShellExecute = false,
+                }
+            );
+            ArgumentNullException.ThrowIfNull(process, nameof(process));
+            ConsoleHelper.Instance.AccentLine($"Alone process owns pid: {process.Id}");
+            return this;
+        }
 
         var failed = false;
 
         var task = ScriptHost.Instance.ExecuteCodesAsync(
             script,
-            false,
-            onError: _ => failed = true
+            onError: _ => failed = true,
+            includeTimestamp: false
         );
 
         task.Wait();
@@ -111,12 +140,18 @@ public class ScriptsManager
             ConsoleHelper.Instance.ErrorLine(task.Result as string ?? "");
         }
 
+        if (failed && options.FailFast)
+            ConsoleHelper.Instance.ErrorLine(task.Result!.ToString()!);
+
         return this;
 
         int GetLcs(string a, string b)
         {
             if (a.IsNullOrWhiteSpace() || b.IsNullOrWhiteSpace())
                 return 0;
+
+            a = Regex.Escape(a);
+            b = Regex.Escape(b);
 
             var w = Math.Max(a.Length, b.Length);
             var h = Math.Min(a.Length, b.Length);

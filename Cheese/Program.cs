@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using Cheese.Options;
+using Cheese.Utils.EasterEggs;
 using Cheese.Utils.General;
 using CommandLine;
 
@@ -8,6 +9,13 @@ var assembly = Assembly.GetExecutingAssembly();
 var version = assembly.GetName().Version;
 
 var versionText = $"v{version?.Major}.{version?.Minor}.{version?.Build} ({version?.MinorRevision})";
+
+if (args.Contains("nice"))
+{
+    _ = EasterEggsManager.Instance.Enter();
+
+    return;
+}
 
 Parser.Default.ParseArguments<Options, SetupOptions, ScriptsOptions, ReferenceOptions, object>(args)
     .WithParsed<Options>(options => options.Execute())
