@@ -1,0 +1,359 @@
+// Platform Ignore
+(?d)*.DS_Store
+
+// Ignore for IDE settings
+(?d).idea/
+(?d).vscode/
+
+// User-specific files
+(?d)*.rsuser
+(?d)*.suo
+(?d)*.user
+(?d)*.userosscache
+(?d)*.sln.docstates
+
+// User-specific files (MonoDevelop/Xamarin Studio)
+(?d)*.userprefs
+
+// Mono auto generated files
+(?d)mono_crash.*
+
+// Build results
+(?d)[Dd]ebug/
+(?d)[Dd]ebugPublic/
+(?d)[Rr]elease/
+(?d)[Rr]eleases/
+(?d)x64/
+(?d)x86/
+(?d)[Ww][Ii][Nn]32/
+(?d)[Aa][Rr][Mm]/
+(?d)[Aa][Rr][Mm]64/
+(?d)bld/
+(?d)[Bb]in/
+(?d)[Oo]bj/
+(?d)[Ll]og/
+(?d)[Ll]ogs/
+
+// Visual Studio cache/options directory
+(?d).vs/
+
+// Visual Studio 2017 auto generated files
+(?d)Generated Files/
+
+// MSTest test Results
+(?d)[Tt]est[Rr]esult*/
+(?d)[Bb]uild[Ll]og.*
+
+// NUnit
+(?d)*.VisualState.xml
+(?d)TestResult.xml
+(?d)nunit-*.xml
+
+// Build Results of an ATL Project
+(?d)[Dd]ebugPS/
+(?d)[Rr]eleasePS/
+(?d)dlldata.c
+
+// Benchmark Results
+(?d)BenchmarkDotNet.Artifacts/
+
+// .NET Core
+(?d)project.lock.json
+(?d)project.fragment.lock.json
+(?d)artifacts/
+
+// ASP.NET Scaffolding
+(?d)ScaffoldingReadMe.txt
+
+// StyleCop
+(?d)StyleCopReport.xml
+
+// Files built by Visual Studio
+(?d)*_i.c
+(?d)*_p.c
+(?d)*_h.h
+(?d)*.ilk
+(?d)*.meta
+(?d)*.obj
+(?d)*.iobj
+(?d)*.pch
+(?d)*.pdb
+(?d)*.ipdb
+(?d)*.pgc
+(?d)*.pgd
+(?d)*.rsp
+(?d)*.sbr
+(?d)*.tlb
+(?d)*.tli
+(?d)*.tlh
+(?d)*.tmp
+(?d)*.tmp_proj
+(?d)*_wpftmp.csproj
+(?d)*.log
+(?d)*.tlog
+(?d)*.vspscc
+(?d)*.vssscc
+(?d).builds
+(?d)*.pidb
+(?d)*.svclog
+(?d)*.scc
+
+// Chutzpah Test files
+(?d)_Chutzpah*
+
+// Visual C++ cache files
+(?d)ipch/
+(?d)*.aps
+(?d)*.ncb
+(?d)*.opendb
+(?d)*.opensdf
+(?d)*.sdf
+(?d)*.cachefile
+(?d)*.VC.db
+(?d)*.VC.VC.opendb
+
+// Visual Studio profiler
+(?d)*.psess
+(?d)*.vsp
+(?d)*.vspx
+(?d)*.sap
+
+// Visual Studio Trace Files
+(?d)*.e2e
+
+// TFS 2012 Local Workspace
+(?d)$tf/
+
+// Guidance Automation Toolkit
+(?d)*.gpState
+
+// ReSharper
+(?d)_ReSharper*/
+(?d)*.[Rr]e[Ss]harper
+(?d)*.DotSettings.user
+
+// TeamCity
+(?d)_TeamCity*
+
+// DotCover
+(?d)*.dotCover
+
+// AxoCover
+(?d).axoCover/*
+(?d)!.axoCover/settings.json
+
+// Coverlet
+(?d)coverage*.json
+(?d)coverage*.xml
+(?d)coverage*.info
+
+// Visual Studio code coverage results
+(?d)*.coverage
+(?d)*.coveragexml
+
+// NCrunch
+(?d)_NCrunch_*
+(?d).*crunch*.local.xml
+(?d)nCrunchTemp_*
+
+// MightyMoose
+(?d)*.mm.*
+(?d)AutoTest.Net/
+
+// Web workbench (sass)
+(?d).sass-cache/
+
+// Installshield output folder
+(?d)[Ee]xpress/
+
+// DocProject
+(?d)DocProject/buildhelp/
+(?d)DocProject/Help/*.HxT
+(?d)DocProject/Help/*.HxC
+(?d)DocProject/Help/*.hhc
+(?d)DocProject/Help/*.hhk
+(?d)DocProject/Help/*.hhp
+(?d)DocProject/Help/Html2
+(?d)DocProject/Help/html
+
+// Click-Once directory
+(?d)publish/
+
+// Publish Web Output
+(?d)*.[Pp]ublish.xml
+(?d)*.azurePubxml
+(?d)*.pubxml
+(?d)*.publishproj
+
+// Microsoft Azure Web App publish settings
+(?d)PublishScripts/
+
+// NuGet Packages
+(?d)*.nupkg
+(?d)*.snupkg
+(?d)**/[Pp]ackages/*
+(?d)!**/[Pp]ackages/build/
+(?d)*.nuget.props
+(?d)*.nuget.targets
+
+// Microsoft Azure Build Output
+(?d)csx/
+(?d)*.build.csdef
+
+// Microsoft Azure Emulator
+(?d)ecf/
+(?d)rcf/
+
+// Windows Store app package
+(?d)AppPackages/
+(?d)BundleArtifacts/
+(?d)Package.StoreAssociation.xml
+(?d)_pkginfo.txt
+(?d)*.appx
+(?d)*.appxbundle
+(?d)*.appxupload
+
+// Visual Studio cache files
+(?d)*.[Cc]ache
+(?d)!?*.[Cc]ache/
+
+// Others
+(?d)ClientBin/
+(?d)~$*
+(?d)*~
+(?d)*.dbmdl
+(?d)*.dbproj.schemaview
+(?d)*.jfm
+(?d)*.pfx
+(?d)*.publishsettings
+(?d)orleans.codegen.cs
+
+// RIA/Silverlight projects
+(?d)Generated_Code/
+
+// Backup files
+(?d)_UpgradeReport_Files/
+(?d)Backup*/
+(?d)UpgradeLog*.XML
+(?d)UpgradeLog*.htm
+(?d)ServiceFabricBackup/
+(?d)*.rptproj.bak
+
+// SQL Server files
+(?d)*.mdf
+(?d)*.ldf
+(?d)*.ndf
+
+// Business Intelligence projects
+(?d)*.rdl.data
+(?d)*.bim.layout
+(?d)*.bim_*.settings
+(?d)*.rptproj.rsuser
+(?d)*- [Bb]ackup.rdl
+(?d)*- [Bb]ackup ([0-9]).rdl
+(?d)*- [Bb]ackup ([0-9][0-9]).rdl
+
+// Microsoft Fakes
+(?d)FakesAssemblies/
+
+// GhostDoc
+(?d)*.GhostDoc.xml
+
+// Node.js Tools for Visual Studio
+(?d).ntvs_analysis.dat
+(?d)node_modules/
+
+// Visual Studio 6 files
+(?d)*.plg
+(?d)*.opt
+(?d)*.vbw
+(?d)*.vbp
+(?d)*.dsw
+(?d)*.dsp
+(?d)*.ncb
+(?d)*.aps
+
+// Visual Studio LightSwitch
+(?d)**/*.HTMLClient/GeneratedArtifacts
+(?d)**/*.DesktopClient/GeneratedArtifacts
+(?d)**/*.DesktopClient/ModelManifest.xml
+(?d)**/*.Server/GeneratedArtifacts
+(?d)**/*.Server/ModelManifest.xml
+(?d)_Pvt_Extensions
+
+// Paket
+(?d).paket/paket.exe
+(?d)paket-files/
+
+// FAKE
+(?d).fake/
+
+// CodeRush
+(?d).cr/personal
+
+// Python
+(?d)__pycache__/
+(?d)*.pyc
+
+// Tabs Studio
+(?d)*.tss
+
+// Telerik's JustMock
+(?d)*.jmconfig
+
+// BizTalk
+(?d)*.btp.cs
+(?d)*.btm.cs
+(?d)*.odx.cs
+(?d)*.xsd.cs
+
+// OpenCover
+(?d)OpenCover/
+
+// Azure Stream Analytics
+(?d)ASALocalRun/
+
+// MSBuild
+(?d)*.binlog
+
+// NVidia Nsight
+(?d)*.nvuser
+
+// MFractors
+(?d).mfractor/
+
+// Visual Studio History
+(?d).localhistory/
+(?d).vshistory/
+
+// BeatPulse
+(?d)healthchecksdb
+
+// Migration Backup
+(?d)MigrationBackup/
+
+// Ionide
+(?d).ionide/
+
+// Fody
+(?d)FodyWeavers.xsd
+
+// VS Code files
+(?d).vscode/*
+(?d)!.vscode/settings.json
+(?d)!.vscode/tasks.json
+(?d)!.vscode/launch.json
+(?d)!.vscode/extensions.json
+
+// Local History for VS Code
+(?d).history/
+
+// Windows Installer
+(?d)*.cab
+(?d)*.msi
+(?d)*.msix
+(?d)*.msm
+(?d)*.msp
+
+// JetBrains Rider
+(?d)*.sln.iml
