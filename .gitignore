@@ -1,3 +1,8 @@
+## Thirdparty Tools Ignore
+#### Syncthing
+*.sync-conflict-*
+.stfolder/
+
 ## Platform Ignore
 *.DS_Store
 
